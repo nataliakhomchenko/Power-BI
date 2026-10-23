@@ -1,0 +1,20 @@
+table DimBusinessUnit
+	lineageTag: 6bc0d716-bb41-4346-9001-f4fe67df98b3
+	sourceLineageTag: [dbo].[DimBusinessUnit]
+
+	column Business_Unit_Code
+		dataType: string
+		lineageTag: 00e30d8b-1c75-4ec3-90e8-93925fd03322
+		sourceLineageTag: Business_Unit_Code
+		summarizeBy: none
+		sourceColumn: Business_Unit_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimBusinessUnit = entity
+		mode: directLake
+		source
+			entityName: DimBusinessUnit
+			schemaName: dbo
+			expressionSource: 'DirectLake - DW_Ledger'
+

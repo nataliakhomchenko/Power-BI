@@ -1,0 +1,354 @@
+table L_Entries
+	lineageTag: f4866597-9a8d-4ade-869d-f8055e2099d9
+	sourceLineageTag: [dbo].[L_Entries]
+
+	column Entry_No
+		dataType: double
+		lineageTag: 4fd23404-8999-4ef7-bbb1-12034d47a180
+		sourceLineageTag: Entry_No
+		summarizeBy: sum
+		sourceColumn: Entry_No
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Transaction_No
+		dataType: double
+		lineageTag: a67dc229-913e-4928-ae89-3543b3b497e4
+		sourceLineageTag: Transaction_No
+		summarizeBy: sum
+		sourceColumn: Transaction_No
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column G_L_Account_No
+		dataType: double
+		lineageTag: b1c17b3f-20fa-45b5-b690-619af74d3665
+		sourceLineageTag: G_L_Account_No
+		summarizeBy: sum
+		sourceColumn: G_L_Account_No
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Posting_Date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4687a658-7b76-4836-a6d8-5e293337c186
+		sourceLineageTag: Posting_Date
+		summarizeBy: none
+		sourceColumn: Posting_Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Document_Date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 540dd246-b7e3-4ef2-910b-2695e455923c
+		sourceLineageTag: Document_Date
+		summarizeBy: none
+		sourceColumn: Document_Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Document_Type
+		dataType: string
+		lineageTag: 3b4c6e0b-2300-45c7-b8a6-05ebf5fe7f1f
+		sourceLineageTag: Document_Type
+		summarizeBy: none
+		sourceColumn: Document_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Document_No
+		dataType: string
+		lineageTag: f0d70944-5c00-4394-ae93-ca457d7393a6
+		sourceLineageTag: Document_No
+		summarizeBy: none
+		sourceColumn: Document_No
+
+		annotation SummarizationSetBy = Automatic
+
+	column Source_Code
+		dataType: string
+		lineageTag: ec52ba65-1ccb-4a5c-bc3f-7db81c657bc1
+		sourceLineageTag: Source_Code
+		summarizeBy: none
+		sourceColumn: Source_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Job_No
+		dataType: string
+		lineageTag: dfb56979-97df-467f-839d-32daff489b09
+		sourceLineageTag: Job_No
+		summarizeBy: none
+		sourceColumn: Job_No
+
+		annotation SummarizationSetBy = Automatic
+
+	column Business_Unit_Code
+		dataType: string
+		lineageTag: 08ce037a-4379-4757-bd6c-81152a378eae
+		sourceLineageTag: Business_Unit_Code
+		summarizeBy: none
+		sourceColumn: Business_Unit_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reason_Code
+		dataType: string
+		lineageTag: 76e3b9d4-37a7-48ad-8ab1-99c4302c22d9
+		sourceLineageTag: Reason_Code
+		summarizeBy: none
+		sourceColumn: Reason_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gen_Posting_Type
+		dataType: string
+		lineageTag: 849dbe8a-32dc-4905-bad7-04c4048dd0de
+		sourceLineageTag: Gen_Posting_Type
+		summarizeBy: none
+		sourceColumn: Gen_Posting_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gen_Bus_Posting_Group
+		dataType: string
+		lineageTag: 19e9798a-0d21-4747-91a8-0f154227d187
+		sourceLineageTag: Gen_Bus_Posting_Group
+		summarizeBy: none
+		sourceColumn: Gen_Bus_Posting_Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gen_Prod_Posting_Group
+		dataType: string
+		lineageTag: fc7cbf35-d43b-453f-b54e-3938cc1f7d84
+		sourceLineageTag: Gen_Prod_Posting_Group
+		summarizeBy: none
+		sourceColumn: Gen_Prod_Posting_Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tax_Area_Code
+		dataType: string
+		lineageTag: c8802ce6-4add-4e97-bc58-c8cecc19ed8e
+		sourceLineageTag: Tax_Area_Code
+		summarizeBy: none
+		sourceColumn: Tax_Area_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tax_Liable
+		dataType: string
+		lineageTag: 12ca16c8-4c98-4bf0-842e-d93d2558c920
+		sourceLineageTag: Tax_Liable
+		summarizeBy: none
+		sourceColumn: Tax_Liable
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tax_Group_Code
+		dataType: string
+		lineageTag: 870ae69c-b05d-4286-adba-af02e2d7b5bc
+		sourceLineageTag: Tax_Group_Code
+		summarizeBy: none
+		sourceColumn: Tax_Group_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Use_Tax
+		dataType: string
+		lineageTag: 95d7fe6c-21d5-4f1e-8525-b2ca19d60541
+		sourceLineageTag: Use_Tax
+		summarizeBy: none
+		sourceColumn: Use_Tax
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tax_Sales_Posting_Group
+		dataType: string
+		lineageTag: a6b702a6-e22f-4e7a-bd4b-96a7547d64f3
+		sourceLineageTag: Tax_Sales_Posting_Group
+		summarizeBy: none
+		sourceColumn: Tax_Sales_Posting_Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tax_Sales_Prod_Posting_Group
+		dataType: string
+		lineageTag: 84eb84b3-536d-4b04-8617-62b44a6c9624
+		sourceLineageTag: Tax_Sales_Prod_Posting_Group
+		summarizeBy: none
+		sourceColumn: Tax_Sales_Prod_Posting_Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column IC_Partner_Code
+		dataType: string
+		lineageTag: c6c4ee21-12ff-415b-8bc7-f4c6e24afd60
+		sourceLineageTag: IC_Partner_Code
+		summarizeBy: none
+		sourceColumn: IC_Partner_Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: double
+		lineageTag: 1901b60f-1cfa-4caf-aeb1-a821706672c0
+		sourceLineageTag: Amount
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Debit_Amount
+		dataType: double
+		lineageTag: 671f79e5-033d-454f-a888-446425f6c032
+		sourceLineageTag: Debit_Amount
+		summarizeBy: sum
+		sourceColumn: Debit_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Credit_Amount
+		dataType: double
+		lineageTag: 5dc080e5-5866-4568-bc54-f02a976e8491
+		sourceLineageTag: Credit_Amount
+		summarizeBy: sum
+		sourceColumn: Credit_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Tax_Sales_Amount
+		dataType: double
+		lineageTag: 722e0ae8-eb4b-40e9-9660-9e830e51f3bb
+		sourceLineageTag: Tax_Sales_Amount
+		summarizeBy: sum
+		sourceColumn: Tax_Sales_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Additional_Currency_Amount
+		dataType: double
+		lineageTag: d8862d8b-b032-492c-a486-8066e72be8b5
+		sourceLineageTag: Additional_Currency_Amount
+		summarizeBy: sum
+		sourceColumn: Additional_Currency_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Add_Currency_Debit_Amount
+		dataType: double
+		lineageTag: ccb12f31-aac6-432e-a50f-c7052fb9e84a
+		sourceLineageTag: Add_Currency_Debit_Amount
+		summarizeBy: sum
+		sourceColumn: Add_Currency_Debit_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Add_Currency_Credit_Amount
+		dataType: double
+		lineageTag: d0a65340-f714-4730-a990-1c6467febd00
+		sourceLineageTag: Add_Currency_Credit_Amount
+		summarizeBy: sum
+		sourceColumn: Add_Currency_Credit_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Dimension_Set_ID
+		dataType: double
+		lineageTag: 8d72dad1-65e3-4dd7-aea0-c7bfe8e91a6c
+		sourceLineageTag: Dimension_Set_ID
+		summarizeBy: count
+		sourceColumn: Dimension_Set_ID
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column G_L_Account_Name
+		dataType: string
+		lineageTag: 44be33ec-7037-4455-b44a-e05e12e85c73
+		sourceLineageTag: G_L_Account_Name
+		summarizeBy: none
+		sourceColumn: G_L_Account_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETag
+		dataType: string
+		lineageTag: e7f57616-d93d-4605-ba1d-29dc75fc3fbb
+		sourceLineageTag: ETag
+		summarizeBy: none
+		sourceColumn: ETag
+
+		annotation SummarizationSetBy = Automatic
+
+	column Debit_vs_Credit
+		dataType: double
+		lineageTag: b56a9375-4496-4260-9153-d7261dda51ed
+		sourceLineageTag: Debit_vs_Credit
+		summarizeBy: sum
+		sourceColumn: Debit_vs_Credit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AccountNoNumeric
+		dataType: double
+		lineageTag: ecc90f80-e5d6-48f6-a16f-26c8c4c07ec1
+		sourceLineageTag: AccountNoNumeric
+		summarizeBy: sum
+		sourceColumn: AccountNoNumeric
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Is_BU_Blank
+		dataType: string
+		lineageTag: f7275ac4-75cb-43ef-ad7e-5e5e86f34269
+		sourceLineageTag: Is_BU_Blank
+		summarizeBy: none
+		sourceColumn: Is_BU_Blank
+
+		annotation SummarizationSetBy = Automatic
+
+	column New_Data_Column
+		dataType: string
+		lineageTag: d4b0f4c8-51b8-48b2-acc9-b81f71634794
+		sourceLineageTag: New_Data_Column
+		summarizeBy: none
+		sourceColumn: New_Data_Column
+
+		annotation SummarizationSetBy = Automatic
+
+	partition L_Entries = entity
+		mode: directLake
+		source
+			entityName: L_Entries
+			schemaName: dbo
+			expressionSource: 'DirectLake - DW_Ledger'
+

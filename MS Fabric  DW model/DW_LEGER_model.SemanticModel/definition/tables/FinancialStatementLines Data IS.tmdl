@@ -1,0 +1,164 @@
+table 'FinancialStatementLines Data IS'
+	lineageTag: bf05a6fa-3cc0-494c-b376-00e0e387854e
+	sourceLineageTag: [dbo].[DimFinancialStatementLine]
+
+	measure 'Financial Statement Values IS' = ```
+			
+			VAR CurrentHeader = SELECTEDVALUE ( 'FinancialStatementLines Data IS'[MeasureName NAV IS] )
+			
+			VAR RawVal = 
+			    SWITCH (
+			        CurrentHeader,
+			
+			        // Headers
+			        "Revenue:", 0,
+			        "Freight:", 0,
+			        "Cost of Sales:", 0,
+			        "Operating Costs- Plant/Yard:", 0,
+			        "Operations Cost- Administration:", 0,
+			        "Depreciation & Amortization:", 0,
+			        "Other Income(Expense):", 0,
+			
+			        // Revenue
+			        "Sales-CategoryA", [SalesF],
+			        "Sales-CategoryB", [SalesNF],
+			        "Rental Income-RP1", [Rental Income],
+			        "Rental Income-Unrelated", [Rental Income-Unrelated Parties],
+			        "Gross Sales", CALCULATE([GrossSales], ALL('FinancialStatementLines Data IS')),
+			
+			        // Freight
+			        "Settlements Adjustment", [SettlementsAdjustments],
+			        "Freight -RP1", [FreightIn],
+			        "Freight Out", [FreightOut],
+			        "Freight Out-CarrierA", [FreightOutCSX],
+			        "Net Sales", CALCULATE([NetSales], ALL('FinancialStatementLines Data IS')),
+			
+			        // Cost of Sales
+			        "Cost of Sales-CategoryA", [CostOfSalesF],
+			        "Cost of Sales-CategoryB", [CostOfSalesNF],
+			        "Purchase Discounts", [PurchaseDiscounts],
+			        "Freight In-VendorA", [Freight In-JS TRUCKING],
+			        "Freight In", [FreightIn],
+			        "Cost of Sales", CALCULATE([CostOfSales], ALL('FinancialStatementLines Data IS')),
+			        "Gross Profit", CALCULATE([GrossProfit], ALL('FinancialStatementLines Data IS')),
+			
+			        // Operating Costs - Plant/Yard
+			        "Wages", [Wages],
+			        "Payroll Related Costs", [PayrollRelatedCosts_Adm],
+			        "Yard Repair and Maintenance", [YardRepairAndMaintenance],
+			        "Fuel, Oxygen, Etc.", [FuelOxygenEtc],
+			        "Utilities", [Utilities],
+			        "Mechanical Parts", [MechanicalParts],
+			        "Repairs and Maintenance", [RepairsAndMaintenance],
+			        "Storage Equipment", [StorageRailcars],
+			        "Equipment Rental", [EquipmentRental],
+			        "Supplies and Miscellaneous", [SuppliesAndMiscellaneous],
+			        "Landfill Expenses", [FluffLandfillExpenses],
+			        "Waste Freight", [Freight In-JS TRUCKING],
+			        "Total Operating Costs Plant/Yard",
+			            CALCULATE([Total Operating Costs-Plant/Yard], ALL('FinancialStatementLines Data IS')),
+			
+			        // Operations Cost - Administration
+			        "Salaries", [Salaries],
+			        "Payroll Related Costs", [PayrollRelatedCosts_Adm],
+			        "Professional Fees", [ProfessionalFees],
+			        "Bank Fees", [Bank Fees],
+			        "Insurance-General", [Insurance],
+			        "Taxes-Property", [Taxes-Real Estate & Property],
+			        "Travel and Entertainment", [TravelAndEntertainment],
+			        "Office Clerical", [OfficeClerical],
+			        "Facility Rents", [Facility\EnvironmentalFees],
+			        "Security", [Security],
+			        "Miscellaneous", [Miscellaneous],
+			        "Total Operating Cost Administration",
+			            CALCULATE([Total Operating Cost Administration], ALL('FinancialStatementLines Data IS')),
+			
+			        // Depreciation & Amortization
+			        "Depreciation & Amortization", [Depreciation and Amortization],
+			        "Amortization - Goodwill", [Amortization-Goodwill],
+			        "Total Depreciation & Amortization",
+			            CALCULATE([Total Int Tax Deprec Amort], ALL('FinancialStatementLines Data IS')),
+			
+			        // Other Income (Expense)
+			        "Interest Expense", [Interest(Expense)],
+			        "Interest Income", [InterestIncome],
+			        "Other Income(Expense)", [Other Income(Expense)],
+			        "Gain Loss on disposals", [Gain Loss on Disposals],
+			        "P&L Non Controlling Interest", [P&L NonControllingInterest],
+			        "Income Taxes", [IncomeTaxes],
+			        "Total Other Income (Expense)",
+			            CALCULATE([Total Other Income (Expense)], ALL('FinancialStatementLines Data IS')),
+			        "Total Expense",
+			            CALCULATE([Total Expense], ALL('FinancialStatementLines Data IS')),
+			        "Net Income",
+			            CALCULATE([Net Income], ALL('FinancialStatementLines Data IS')),
+			        "EBITDA",
+			            CALCULATE([EBITDA], ALL('FinancialStatementLines Data IS')),
+			        "Net Income After Taxes",
+			            CALCULATE([Net Income After Taxes], ALL('FinancialStatementLines Data IS')),
+			
+			        "Variance - Out of Balance",
+			            CALCULATE([Variance - Out of Balance], ALL('FinancialStatementLines Data IS')),
+			
+			        BLANK()
+			    )
+			
+			VAR IsCategoryHeader = RIGHT ( TRIM ( CurrentHeader ), 1 ) = ":"
+			
+			RETURN
+			    IF ( IsCategoryHeader, "", RawVal )
+			```
+		lineageTag: a234ff5a-fcf2-47c2-8a74-1fa1bd2f72ca
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'MeasureName NAV IS'
+		dataType: string
+		lineageTag: 11ce5162-bd6d-4657-a58d-78a834e3ad68
+		sourceLineageTag: MeasureName NAV IS
+		summarizeBy: none
+		sourceColumn: MeasureName NAV IS
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 0decef3e-f562-475a-a6ad-1f601db843ab
+		sourceLineageTag: SortOrder
+		summarizeBy: sum
+		sourceColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsBold
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e8cfa827-ca9c-4a2f-b4d2-4b607f34aa10
+		sourceLineageTag: IsBold
+		summarizeBy: none
+		sourceColumn: IsBold
+
+		annotation SummarizationSetBy = Automatic
+
+	column IndentLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: 65ce47fa-79d1-421d-ae45-7467468cab0e
+		sourceLineageTag: IndentLevel
+		summarizeBy: sum
+		sourceColumn: IndentLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FinancialStatementLines Data IS' = entity
+		mode: directLake
+		source
+			entityName: DimFinancialStatementLine
+			schemaName: dbo
+			expressionSource: 'DirectLake - DW_Ledger'
+
+	changedProperty = Name
+

@@ -1,0 +1,81 @@
+table 'Time Intelligence Calc Group'
+	lineageTag: ca0c7ed8-6356-410c-808d-9292a8232c55
+
+	calculationGroup
+
+		calculationItem 'Current Month' = ```
+				VAR SelYear = [Selected_Year M]
+				VAR SelMonth = [Selected_Month M]
+				
+				VAR TargetYear = COALESCE(SelYear, MAX(DimCalendar[Year]))
+				VAR TargetMonth = COALESCE(SelMonth, MAX(DimCalendar[MonthNo]))
+				
+				VAR StartDate = DATE(TargetYear, TargetMonth, 1)
+				VAR EndDate = EOMONTH(StartDate, 0)
+				
+				RETURN
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    REMOVEFILTERS(DimCalendar),
+				    KEEPFILTERS(
+				        DimCalendar[CalendarDate] >= StartDate && 
+				        DimCalendar[CalendarDate] <= EndDate
+				    )
+				)
+				```
+
+		calculationItem YTD =
+				VAR SelYear = [Selected_Year M]
+				VAR SelMonth = [Selected_Month M]
+				
+				VAR TargetYear = COALESCE(SelYear, MAX(DimCalendar[Year]))
+				VAR TargetMonth = COALESCE(SelMonth, MAX(DimCalendar[MonthNo]))
+				
+				VAR StartDate = DATE(TargetYear, 1, 1)
+				VAR EndDate = EOMONTH(DATE(TargetYear, TargetMonth, 1), 0)
+				
+				RETURN
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    ALL(DimCalendar),
+				    DimCalendar[CalendarDate] >= StartDate,
+				    DimCalendar[CalendarDate] <= EndDate,
+				    FILTER(
+				        ALL(DimCalendar),
+				        [Include_2_Year_Months_Filter] = 1
+				    )
+				)
+
+		calculationItem 'YTD SPLY' =
+				
+				VAR SelYear = [Selected_Year M]
+				VAR SelMonth = [Selected_Month M]
+				VAR EffectiveMonth = COALESCE(SelMonth, 12)
+				
+				VAR PriorYear = SelYear - 1
+				VAR StartOfYearSPLY = DATE(PriorYear, 1, 1)
+				VAR MaxDateSPLY = EOMONTH(DATE(PriorYear, EffectiveMonth, 1), 0)
+				
+				RETURN
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    REMOVEFILTERS(DimCalendar),
+				    DATESBETWEEN(
+				        DimCalendar[CalendarDate],
+				        StartOfYearSPLY,
+				        MaxDateSPLY
+				    )
+				)
+
+	column 'Current Month'
+		dataType: string
+		lineageTag: 843f29aa-4d6d-4128-95fb-37f976971aae
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		lineageTag: 5ea55483-ddec-4672-8b70-4c9f8e6b297b
+		sourceColumn: Ordinal
+

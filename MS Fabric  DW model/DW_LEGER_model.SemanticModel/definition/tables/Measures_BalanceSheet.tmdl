@@ -1,0 +1,1554 @@
+table Measures_BalanceSheet
+	lineageTag: da6b8328-f5a9-4bc8-b1a2-cd4e7c2a1350
+
+	measure Cash = ```
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			       VALUE( L_Entries[AccountNoNumeric]) >= 10000 &&
+			       VALUE( L_Entries[AccountNoNumeric] )<= 10299
+			    ),
+			
+			    
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 8a852c57-da7f-4db4-94f1-49059a55876b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Certificates of Deposit' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			       VALUE(L_Entries[AccountNoNumeric]) = 11020
+			    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 417f7e03-3bbe-4930-8095-9e878b5ef392
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accounts Receivable Net' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) >=12000 &&  VALUE(L_Entries[AccountNoNumeric])<=12049)||
+			   (VALUE(L_Entries[AccountNoNumeric]) >=12051 &&  VALUE(L_Entries[AccountNoNumeric])<=12999)|| VALUE(L_Entries[AccountNoNumeric])=13200
+			    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: f133a796-b4f9-436c-aeed-28d7008f3106
+
+	measure 'Accounts Receivable-J1' = ```
+			
+			 
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 VALUE(L_Entries[AccountNoNumeric]) =12050
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			
+			
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: c2fc6120-47a0-43a6-bb2f-7510ca0861ee
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Inventory =
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			        VALUE(L_Entries[AccountNoNumeric]) >= 14000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 14500
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			) + 0
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 8b610179-e9c1-4b78-b2fe-3fa2923f2c42
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Prepaid Expenses' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			   (VALUE(L_Entries[AccountNoNumeric]) >=15001 &&VALUE(L_Entries[AccountNoNumeric]) <=15050)
+			 ||  VALUE(L_Entries[AccountNoNumeric]) =15203
+			    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 83624f48-d9df-4041-b7b7-05795b23a490
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Deferred Tax Asset' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			      VALUE(L_Entries[AccountNoNumeric]) =15900
+			    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 54468248-3c91-4e27-acb7-b64a1df4ae26
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Other Current Assets' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =19910)
+			    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 6f22cdcb-9589-43c8-9854-337442c8aa7a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Current Assets' = ```
+			[Cash]+[Accounts Receivable Net]+[AR_RelatedParty]+[Inventory]+[Prepaid Expenses]+[Other Current Assets]
+			
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Totals
+		lineageTag: 1a393392-28f3-4f4f-a8f7-dd61fcdf0c72
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Land = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) >=17000 &&  VALUE(L_Entries[AccountNoNumeric])<=17075)),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 1cae7ac0-fce2-44dc-8624-8451a0f709e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Building & Improvements' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			( (VALUE(L_Entries[AccountNoNumeric]) >=17100 &&  VALUE(L_Entries[AccountNoNumeric])<=17150) )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 7ce39ca0-da2b-4784-a195-208d33403a33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Office and Computers' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) >=17300 &&  VALUE(L_Entries[AccountNoNumeric])<=17301)    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: dee3c67a-616b-4427-bb07-8b61e9a5ddba
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Vehicles = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =17410 )  ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 7e3b4dad-ebdd-4325-b736-df634f8bad33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Machine/Equipment = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =17500 )   ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 7d0e0caa-922c-4231-bba7-f49b431dc5ec
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Prop, Plant, & Equip' =
+			
+			[Land]+[Building & Improvements]+[Office and Computers]+[Vehicles]+[Machine/Equipment]
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 3b84472f-5526-4a14-a6c9-721343b589ee
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accum Depreciation' = ```
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			  (VALUE(L_Entries[AccountNoNumeric]) >=18000 &&  VALUE(L_Entries[AccountNoNumeric])<=18999)   ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 845eaeab-8acf-402a-9204-f0219c73f442
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Property, Plant,& Equip' = ```
+			
+			[Total Prop, Plant, & Equip]+[Accum Depreciation]
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Property, Plant, & Equipment
+		lineageTag: 71422e3e-dc4c-4963-98f4-36c30c80d1cb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Security Deposits' = ```
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) >=19000 &&  VALUE(L_Entries[AccountNoNumeric])<=19014    )),
+			
+			 
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: e2df8857-20b7-470b-b3ff-d3a6cb9f887b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Notes Receivable' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {13610,19365}   )),
+			
+			 
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 1d5a415e-e733-43eb-8360-7fff50f3347d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Investments = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) >=11000 &&  VALUE(L_Entries[AccountNoNumeric])<=11019)|| 
+			  (VALUE(L_Entries[AccountNoNumeric]) >=11021 &&  VALUE(L_Entries[AccountNoNumeric])<=11998)  ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 74276316-b177-4262-bc3f-2fa31c411754
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Deposits on Equipment' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) in {19360,17638,15204} )  ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 8a1e1104-eab3-4d94-b16f-cfbe957dd28e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Investments In Related Parties' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) >=19011 && VALUE(L_Entries[AccountNoNumeric]) <=19110  )|| VALUE(L_Entries[AccountNoNumeric]) =19120 ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 4a31b345-f91b-418e-87e7-39969edf61bf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DueFrom_RP2 =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) in {16210,16222,16224,16232,16238} )  ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: bd1303eb-cccb-4b69-a6b0-fa93dd49589c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DueFrom_RP3 = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) in {13250,16925,16939,16030,16040} ) ),
+			
+			   
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 7cc0b7fe-ca2e-48f1-9aa6-5b1d14619425
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Loan Fees, Net' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) >=15210 && VALUE(L_Entries[AccountNoNumeric]) <=15211) ||  VALUE(L_Entries[AccountNoNumeric])  in {15003,15101} ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 14af10f7-0a16-42a4-8adc-2d16168bf0df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Right of Use Assets-Lease' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) =19700)  ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: f463a62f-3bed-4bac-92d3-51938231fa46
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Goodwill = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			    FILTER(
+			        ALL(L_Entries),
+			(VALUE(L_Entries[AccountNoNumeric]) =19900)  ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)   
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 678055b2-212e-4456-b945-0c6706318ad7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Intangibles = ```
+			0
+			/*
+			VAR MaxDate = MAX(Dates[Date])
+			
+			RETURN
+			CALCULATE(
+			    SUM(G_LEntries[Amount]),
+			
+			    FILTER(
+			        ALL(G_LEntries),
+			(VALUE(G_LEntries[AccountNoNumeric]) =19890)  ),
+			
+			   
+			    FILTER(
+			        ALL(Dates),
+			        Dates[Date] <= MaxDate
+			    )
+			)  +0*/
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Other Assets
+		lineageTag: 266a2afc-ac40-45af-824f-c725078af24c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Assets' = [Total Current Assets]+[Net Property, Plant,& Equip]+[Security Deposits]+[Notes Receivable]+[Investments]+[Deposits on Equipment]+[Investments In Related Parties]+[DueFrom_RP2]+[DueFrom_RP3]+[Loan Fees, Net]+[Right of Use Assets-Lease]+[Goodwill]
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Totals
+		lineageTag: b57846f9-9641-4993-a961-22bcb789e0a8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Other Assets' = [Notes Receivable]+[Investments]+[Deposits on Equipment]+[Investments In Related Parties]+[DueFrom_RP2]+[DueFrom_RP3]+[Loan Fees, Net]+[Right of Use Assets-Lease]+[Goodwill]+[Intangibles]+[Security Deposits]
+		formatString: $#,0;($#,0)
+		displayFolder: 01-Assets\Totals
+		lineageTag: 0c745521-60f4-4c60-9d15-ce4acf7f6d1f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Current Portion of Notes Payable' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {23100})
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: a5751b26-d2d3-4c8c-878f-364c3b48fd68
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure LoanType_RP_Current = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =24150 )
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: 7b5b7c3f-fc61-4e0f-85e5-76aedda840fd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Line of Credit-Revolver' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =27118)
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: 7a482ae0-47ee-4570-9437-62abf795b95a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Operating Lease Liab-Current Portion' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =24700)
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: 77385172-acb9-46a3-85f0-013cfa65b39e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accounts Payable' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN 
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) >1000 )
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: 0406cfaf-9f97-4a3e-a1b8-683af4188fb1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accounts Payable-J1' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric])=20050)
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: a17bcaf1-c21f-415c-a486-a5eec7df8247
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accrued Expenses' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 ((VALUE(L_Entries[AccountNoNumeric])>=21000 && VALUE(L_Entries[AccountNoNumeric])<=21500) || (VALUE(L_Entries[AccountNoNumeric])=22000 ))
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: 165a5248-cc30-4cfe-82c5-2c9c81f488ad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Current Liabilities' = [Current Portion of Notes Payable]+ [BankA_BalloonPayment]+[Security Deposits from Renters]+[Accounts Payable]+[Accounts Payable-J1]+[Accrued Expenses]
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: ea758874-b390-4dca-b6ab-418807a3aa59
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Notes Payable,Less Current Portion' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in{23101,25500} || (VALUE(L_Entries[AccountNoNumeric]) >=27000 && VALUE(L_Entries[AccountNoNumeric])<=27997 )
+			
+			 )
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: b5137d11-f5a5-4428-a6e5-a20f1645a05b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BankB_LineOfCredit =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {25004,27119})
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: 189d6d3d-076b-4e84-b8a0-ca2c02e50e8e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DueTo_RP2 =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 ((VALUE(L_Entries[AccountNoNumeric])>=20700 &&VALUE(L_Entries[AccountNoNumeric])<=20798) )
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: c8d5d381-702f-44a5-8961-a76c2e3589a4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Operating Lease Liab-Net of Current' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric])=28700 
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: ab2e38ce-17c3-4697-9e50-531fa4426cc0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Due To Other Related Parties' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric])in {24100,20800} || (VALUE(L_Entries[AccountNoNumeric])>=28900 && VALUE(L_Entries[AccountNoNumeric])<=29398) 
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: 35e938d0-3f33-411f-a981-d46d9e7d1900
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Deferred Revenue' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric])=22475
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: 6cde761d-a580-44b0-a7fb-3a6df4497dbf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Other Liabilities' = [Notes Payable,Less Current Portion]+[LoanType2]+[DueTo_RP2]+[DueTo_RP1]+[Deferred Revenue]
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: 13a81687-343c-4c50-97ab-3f6fc6ec93b9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Liabilities' = [Total Current Liabilities]+[Total Other Liabilities]
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities
+		lineageTag: 7ddffecc-410a-4b0a-bb58-50e58eaa2416
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Preferred Stock' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {29510} 
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 60f36437-346e-4ecc-84f8-74406eb50c6d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Additional Paid in Capital' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {29515} 
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 74536a0e-7b09-4e7c-bfee-1adcd719644f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Contributed Capital' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {29520,29100,28000} 
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 62896e10-dfa9-4202-bc4f-648c750b86dc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Comprehensive Income' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =29551
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: ca5b6a0d-fe33-4422-91e7-c48ce1ac1970
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Treasury Stock' = ```
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			RETURN
+			CALCULATE(
+			    SUMX(
+			        DISTINCT(L_Entries[Entry_No]),
+			        CALCULATE(SUM(L_Entries[Amount]))
+			    ),
+			    value(L_Entries[AccountNoNumeric] ) in {29300,29530},
+			    FILTER(ALL(DimCalendar), DimCalendar[CalendarDate] <= MaxDate)
+			)
+			
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: efb8ce07-9b51-4e7b-bafa-4b64b950018f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Equity-Non Controlling Interest' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) =29545
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 9f98bd26-d747-4c1f-8b34-687cfad5b8d2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Retained Earnings' = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {29550,29900}
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			/*
+			VAR MaxDate = MAX(Dates[Date])
+			VAR Start_OfYear = DATE(YEAR(MaxDate), 1, 1)
+			
+			RETURN
+			CALCULATE(
+			    SUM(G_LEntries[Amount]),
+			
+			    VALUE(G_LEntries[AccountNoNumeric]) IN {29550, 29900},
+			
+			  
+			    G_LEntries[Posting_Date] < Start_OfYear
+			)
+			*/
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 7c2f54c7-53ac-4f8d-a69b-f2f51606c91d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Current Year Income' = ```
+			
+			/*VAR MaxDate = MAX(Dates[Date])
+			VAR Start_OfYear = DATE(YEAR(MaxDate), 1, 1)
+			
+			RETURN
+			CALCULATE(
+			    SUM(G_LEntries[Amount]),
+			
+			    FILTER(
+			        ALL(G_LEntries),
+			        VALUE(G_LEntries[AccountNoNumeric]) >= 30000 &&
+			        VALUE(G_LEntries[AccountNoNumeric]) <= 99999 
+			       // && G_LEntries[Source_Code] <> "CLSINCOME"
+			    ),
+			
+			    FILTER(
+			        ALL(Dates),
+			        Dates[Date] >= Start_OfYear &&
+			        Dates[Date] <= MaxDate
+			    )
+			)*/
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 VALUE(L_Entries[AccountNoNumeric]) >= 30000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 99999 
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: bcb81e99-d9ce-4159-8859-3cadb734bd81
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Stockholder Equity' = [Distributions_ShareholderA]+[Preferred Stock]+[Contributed Capital]+[Comprehensive Income]+[Treasury Stock]+[Equity-Non Controlling Interest]+[Retained Earnings]+[Current Year Income]
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 5d28e8b0-ca82-4e60-8533-144137184209
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Liabilities & Stockholders Equity' = [Total Liabilities]+[Total Stockholder Equity]
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 40b815a6-5635-4080-88a4-94e4eb75e273
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure VarianceOutOfBalance = [Total Assets]+[Total Liabilities & Stockholders Equity]
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 02-Liabilities
+		lineageTag: be4713c4-3b00-4583-ab7a-9036be5a697f
+
+	measure AR_RelatedParty = ```
+			
+			 
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 VALUE(L_Entries[AccountNoNumeric]) =13500
+			    ),
+			
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 01-Assets\Current Assets
+		lineageTag: 84808e6f-be7c-4590-bb0d-323c3e23fef9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BankA_BalloonPayment = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {28650})
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: 697ca8a1-8e58-41a7-bf9e-010ea60556e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Security Deposits from Renters' =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) >=20100 && VALUE(L_Entries[AccountNoNumeric]) <=20549)
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Current Liabilities
+		lineageTag: 376f039f-2820-4ac0-8038-73cb6d192612
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure LoanType2 =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in{29000} )
+			
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: f8303620-1285-4654-be84-778e24c1dd50
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure DueTo_RP1 =
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 ((VALUE(L_Entries[AccountNoNumeric])>=23500 && VALUE(L_Entries[AccountNoNumeric])<=24600) )
+			    ),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)+0
+		formatString: $#,0;($#,0)
+		displayFolder: 02-Liabilities\Other Liabilities
+		lineageTag: a890a0a6-66f3-4445-9945-940c5457ca1b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Distributions_ShareholderA = ```
+			
+			
+			VAR MaxDate = MAX(DimCalendar[CalendarDate])
+			
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			
+			
+			    FILTER(
+			        ALL(L_Entries),
+			 (VALUE(L_Entries[AccountNoNumeric]) in {29500} 
+			    )),
+			
+			    FILTER(
+			        ALL(DimCalendar),
+			        DimCalendar[CalendarDate] <= MaxDate
+			    )
+			)
+			```
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: 427fbc28-98f0-4c7c-a1e6-96c8cb1759c6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'RE 2026 Activity' = ```
+			
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			    VALUE(L_Entries[AccountNoNumeric]) IN {29550, 29900},
+			    YEAR(L_Entries[Posting_Date]) = 2026
+			)
+			
+			```
+		displayFolder: 02-Liabilities\Stockholders Equity
+		lineageTag: d9510504-8f15-4f57-89be-342db8dd6e81
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Value
+		isHidden
+		formatString: 0
+		isAvailableInMdx: false
+		lineageTag: c3299e44-0ec2-4ed7-bd71-c89b02512e6d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition Measures_BalanceSheet = calculated
+		mode: import
+		source = ROW("Value", 0)
+
+	annotation PBI_Id = cd6ecac072564caeb186799f99cda1ab
+

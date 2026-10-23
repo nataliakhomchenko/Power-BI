@@ -1,0 +1,158 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 241.14426544009575,
+            "y": 378
+          },
+          "nodeIndex": "DimBusinessUnit",
+          "nodeLineageTag": "6bc0d716-bb41-4346-9001-f4fe67df98b3",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 402,
+            "y": 47
+          },
+          "nodeIndex": "L_Entries",
+          "nodeLineageTag": "f4866597-9a8d-4ade-869d-f8055e2099d9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "DimCalendar",
+          "nodeLineageTag": "5508efe2-dc3a-4fa4-b6b4-3aa79889783a",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 666.03556904990751,
+            "y": 86
+          },
+          "nodeIndex": "Measures_IncomeStatements",
+          "nodeLineageTag": "7a657520-77e1-41a6-bd8c-51cdbee5282c",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 300
+        },
+        {
+          "location": {
+            "x": 668.03556904990751,
+            "y": 0
+          },
+          "nodeIndex": "FinancialStatementLines Data IS",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 176
+        },
+        {
+          "location": {
+            "x": 947.03556904990751,
+            "y": 0
+          },
+          "nodeIndex": "FinancialStatementLines  Data BS",
+          "nodeLineageTag": "537338d1-e804-4e32-afe7-aa6d64e0b1be",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 176
+        },
+        {
+          "location": {
+            "x": 664.03556904990751,
+            "y": 176
+          },
+          "nodeIndex": "Measures_BalanceSheet",
+          "nodeLineageTag": "da6b8328-f5a9-4bc8-b1a2-cd4e7c2a1350",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 300
+        },
+        {
+          "location": {
+            "x": 950.03556904990751,
+            "y": 88
+          },
+          "nodeIndex": "Measures and KPIs",
+          "nodeLineageTag": "608fee50-ff63-4a8e-83c9-5260219cd561",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 300
+        },
+        {
+          "location": {
+            "x": 946.03556904990728,
+            "y": 186
+          },
+          "nodeIndex": "Slicer Calendar Table",
+          "nodeLineageTag": "67543215-7b59-412a-b51f-cb2104aedccd",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 272
+        },
+        {
+          "location": {
+            "x": 662.76290211875494,
+            "y": 269
+          },
+          "nodeIndex": "Time Intelligence Calc Group",
+          "nodeLineageTag": "ca0c7ed8-6356-410c-808d-9292a8232c55",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 128
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

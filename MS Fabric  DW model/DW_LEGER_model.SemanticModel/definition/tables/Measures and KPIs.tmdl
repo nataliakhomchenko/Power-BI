@@ -1,0 +1,343 @@
+table 'Measures and KPIs'
+	lineageTag: 608fee50-ff63-4a8e-83c9-5260219cd561
+
+	measure 'Rolling 3 Month Avg' =
+			
+			AVERAGEX(
+			    DATESINPERIOD(
+			        DimCalendar[CalendarDate],
+			         MAX('DimCalendar'[CalendarDate]),
+			        -3,
+			        DAY
+			    ),
+			    CALCULATE(AVERAGE(L_Entries[Amount]))
+			)
+		lineageTag: 7948823d-966f-40f6-8fb3-cad9dd85c3f0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Running Avg 3M' = ```
+			
+			VAR WindowDates =
+			    DATESINPERIOD(
+			        'DimCalendar'[CalendarDate],
+			        MAX('DimCalendar'[CalendarDate]),
+			        -3,
+			        MONTH
+			    )
+			RETURN
+			AVERAGEX(
+			    WindowDates,
+			    [Debit_vs_Credit]
+			)
+			
+			```
+		lineageTag: 885d6daa-5369-4b2d-ba92-3e213b67b947
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Revenue' = ```
+			
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			    L_Entries[Gen_Posting_Type] = "Sale"
+			)
+			
+			```
+		lineageTag: 4f0d54dd-e4ba-4854-8e62-8cd9c5f79f53
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Expenses' = ```
+			
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			    L_Entries[Gen_Posting_Type] IN {"Expense", "Purchase"}
+			)
+			
+			```
+		lineageTag: 7ff3f34c-a1fd-4531-beb6-d3f92d5b83db
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Income_' = ```
+			
+			[Total Revenue] - [Total Expenses]
+			
+			```
+		lineageTag: 36b9dc2c-9849-45d2-9965-a34146c88523
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales Tax' = ```
+			
+			SUM(L_Entries[Tax_Sales_Amount])
+			
+			```
+		formatString: 0
+		lineageTag: 4af0e150-0a0b-4b5c-9304-44a872840df4
+
+	measure 'Accounts Receivable' = ```
+			
+			CALCULATE(
+			    SUM(L_Entries[Debit_Amount]) - SUM(L_Entries[Credit_Amount]),
+			    L_Entries[G_L_Account_Name] = "Accounts Receivable"
+			)
+			
+			```
+		lineageTag: 675bbd47-ac88-4517-a249-c5768caeab7f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accounts Payable_' = ```
+			
+			-1*CALCULATE(
+			    SUM(L_Entries[Credit_Amount]) - SUM(L_Entries[Debit_Amount]),
+			    L_Entries[G_L_Account_Name] = "Accounts Payable"
+			)
+			
+			```
+		lineageTag: 8510eeda-a7a6-407b-a034-46741a7216fc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Transactions' = ```
+			
+			COUNTROWS(L_Entries)
+			
+			```
+		formatString: 0
+		lineageTag: c60e61f3-b6c3-4b1f-a35a-486eaec491dd
+
+	measure 'Debit Credit Difference' = ```
+			
+			SUM(L_Entries[Debit_Amount]) - SUM(L_Entries[Credit_Amount])
+			
+			```
+		lineageTag: a634870a-568b-45c7-a08c-6839379dc0ff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Negative Amount Count' = ```
+			
+			COUNTROWS(
+			    FILTER(L_Entries, L_Entries[Amount] < 0)
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 0e7046e6-aed3-463b-956c-a764d7cee9c4
+
+	measure 'Blank BU Count' = ```
+			
+			COUNTROWS(
+			    FILTER(L_Entries, ISBLANK(L_Entries[Business_Unit_Code]))
+			)
+			
+			```
+		formatString: 0
+		lineageTag: b5230d20-686c-4dbd-bf5d-122ae9984c17
+
+	measure 'New Data Flags' = ```
+			
+			COUNTROWS(
+			    FILTER(L_Entries, NOT ISBLANK(L_Entries[New_Data_Column]))
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 1e3af573-801b-4a0c-9f5b-12defb7cebdf
+
+	measure 'Revenue by BU' = ```
+			
+			CALCULATE(
+			    [Total Revenue],
+			    ALLEXCEPT(L_Entries, L_Entries[Business_Unit_Code])
+			)
+			
+			```
+		lineageTag: 1e310a32-61a7-478d-9765-564d6f773bd2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Expense by BU' = ```
+			
+			CALCULATE(
+			    [Total Expenses],
+			    ALLEXCEPT(L_Entries, L_Entries[Business_Unit_Code])
+			)
+			
+			```
+		lineageTag: f20a0a63-6c1d-4f85-907e-c036e4d4ef99
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'KPI Wrapper' = ```
+			
+			SWITCH(
+			    TRUE(),
+			
+			    ISSELECTEDMEASURE([Total Revenue]), [Total Revenue],
+			    ISSELECTEDMEASURE([Total Expenses]), [Total Expenses],
+			    ISSELECTEDMEASURE([Net Income_]), [Net Income_],
+			    ISSELECTEDMEASURE([Sales Tax]), [Sales Tax],
+			    ISSELECTEDMEASURE([Accounts Receivable]), [Accounts Receivable],
+			    ISSELECTEDMEASURE([Accounts Payable_]), [Accounts Payable_],
+			  
+			
+			    BLANK()
+			)
+			```
+		lineageTag: 40061cc4-6244-43a5-bce0-409eb7cda2f0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_total_rev =
+			SWITCH(
+			    TRUE(),
+			[Total Revenue]>0,"▲",
+			[Total Revenue]<0,"▼",
+			[Total Revenue]=0,"-")
+		lineageTag: d88870e8-d137-4533-91a0-ea99560d68a2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_KPI =
+			SWITCH(
+			    TRUE(),
+			'Measures and KPIs'[KPI Wrapper]>0,"up",
+			'Measures and KPIs'[KPI Wrapper]<0,"down",
+			'Measures and KPIs'[KPI Wrapper]=0,"na")
+		lineageTag: e5d58cb1-ddd5-4e58-a654-99e728b46dd1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_total_exp =
+			SWITCH(
+			    TRUE(),
+			[Total Expense]>0,"▲",
+			[Total Expense]<0,"▼",
+			[Total Expense]=0,"-")
+		lineageTag: b21bda96-8b75-4a49-beeb-da5df4d6b999
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_Net_income =
+			SWITCH(
+			    TRUE(),
+			[Net Income]>0,"▲",
+			[Net Income]<0,"▼",
+			[Net Income]=0,"-")
+		lineageTag: 2e534f20-37be-4701-b4d5-efcc6a695245
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_SaleTax =
+			SWITCH(  TRUE(),
+			  [Sales Tax]>0,"▲",
+			[Sales Tax]<0,"▼",
+			[Sales Tax]=0,"-")
+		lineageTag: 63bccfbf-97c0-41ea-a9e7-94dabd8bd93b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_Acc_Reciv =
+			SWITCH(true(),
+			  [Accounts Receivable]>0,"▲",
+			[Accounts Receivable]<0,"▼",
+			[Accounts Receivable]=0,"-")
+		lineageTag: 9f59cfca-e050-4254-8105-a7c374fe82ef
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure arrow_Acc_Pay =
+			SWITCH(true(),
+			  [Accounts Payable]>0,"▲",
+			[Accounts Payable]<0,"▼",
+			[Accounts Payable]=0,"-")
+		lineageTag: 340b8600-0114-4468-8742-ff40a9266ae1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accounts With DC Errors' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT( L_Entries[G_L_Account_No] ),
+			    L_Entries[Debit_Amount] <> L_Entries[Credit_Amount]
+			)
+		lineageTag: 9b535592-2c8e-4b39-8079-6c7b37f63ed8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Accounts With New Data Flags' = ```
+			
+			VAR CurrentPeriodStart =
+			    DATE(2024, 1, 1)   // adjust to your reporting period
+			VAR AccountsSummary =
+			    SUMMARIZE(
+			        L_Entries,
+			        L_Entries[G_L_Account_No],
+			        "FirstSeenDate", MIN(L_Entries[Posting_Date])
+			    )
+			RETURN
+			COUNTROWS(
+			    FILTER(
+			        AccountsSummary,
+			        [FirstSeenDate] >= CurrentPeriodStart
+			    )
+			)
+			
+			
+			```
+		lineageTag: 949a5ad5-0d91-4c9d-b14b-dc9e353c0d4c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Amount' =
+			
+			SUM(L_Entries[Amount])
+		lineageTag: 75166f00-d476-404a-b81d-db1db13169f4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Reductions' = ```
+			
+			SUMX(
+			    FILTER(
+			        'L_Entries',
+			        'L_Entries'[G_L_Account_Name] = "Sales Returns"
+			            || 'L_Entries'[Document_Type] IN {
+			                "Refund",
+			                "Credit Memo",
+			                "CreditMemo",
+			                "WriteOff"
+			            }
+			    ),
+			    'L_Entries'[Debit_Amount] - 'L_Entries'[Credit_Amount]
+			)
+			
+			```
+		lineageTag: 169729d9-0fb7-4795-b85d-bbb853b65bfc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Operating Expenses' = [Total Operating Cost Administration]+[Total Operating Costs-Plant/Yard]
+		lineageTag: c2f5fe9e-9f1b-4280-8986-ad968cc31595
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Value
+		formatString: 0
+		lineageTag: 6f197ef8-bb7e-48dd-a38a-aeed3d5ce86e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Measures and KPIs' = calculated
+		mode: import
+		source = ROW("Value", 0)
+
+	annotation PBI_Id = 804af5dae5b44c23aee402ad4943d333
+

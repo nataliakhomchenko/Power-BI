@@ -1,0 +1,151 @@
+table 'FinancialStatementLines  Data BS'
+	lineageTag: 537338d1-e804-4e32-afe7-aa6d64e0b1be
+	sourceLineageTag: [dbo].[FinancialStatementLines_BS]
+
+	measure 'Financial Statement Values BS' = ```
+			
+			
+			VAR item_ =
+			    MAX ( 'FinancialStatementLines  Data BS'[MeasureName NAV BS] )
+			
+			VAR RawVal = 
+			    SWITCH (
+			        item_,
+			
+			        // Headers
+			        "Assets:", 0,
+			        "Current Assets:", 0,
+			        "Property, Plant, & Equipment:", 0,
+			        "Other Assets:", 0,
+			        "Liabilities and Stockholders Equity:", 0,
+			        "Current Liabilities:", 0,
+			        "Other Liabilities:", 0,
+			        "Stockholders Equity:", 0,
+			
+			        // Current Assets
+			        "Cash", [Cash],
+			        "Accounts Receivable, net", [Accounts Receivable Net],
+			        "Accounts Rec-Related Party", [AR_RelatedParty],
+			        "Inventory", [Inventory],
+			        "Prepaid Expenses", [Prepaid Expenses],
+			        "Other Current Assets", [Other Current Assets],
+			        "Total Current Assets", [Total Current Assets],
+			
+			        // Property, Plant & Equipment
+			        "Land", [Land],
+			        "Building & Improvements", [Building & Improvements],
+			        "Office and Computers", [Office and Computers],
+			        "Vehicles", [Vehicles],
+			        "Machine/Equipment", [Machine/Equipment],
+			        "Total Prop, Plant, & Equip", [Total Prop, Plant, & Equip],
+			        "Accum Depreciation", [Accum Depreciation],
+			        "Net Property, Plant,& Equip", [Net Property, Plant,& Equip],
+			
+			        // Other Assets
+			        "Deposits on Equipment", [Deposits On Equipment],
+			        "Notes Receivable", [Notes Receivable],
+			        "Investments", [Investments],
+			        "DueFrom_RP2", [DueFrom_RP2],
+			        "DueFrom_RP3", [DueFrom_RP3],
+			        "Goodwill", [Goodwill],
+			        "Intangibles", [Intangibles],
+			        "Total Other Assets", [Total Other Assets],
+			        "Total  Assets", [Total Assets],
+			
+			        // Current Liabilities
+			        "Accrued Expenses", [Accrued Expenses],
+			        "Accounts Payable", [Accounts Payable],
+			        "Security Deposits from Renters", [Security Deposits from Renters],
+			        "Current Portion of Notes Payable", [Current Portion of Notes Payable],
+			        "Total Current Liabilities", [Total Current Liabilities],
+			
+			        // Other Liabilities
+			        "Notes Payable, Less Current Port.", [Notes Payable,Less Current Portion],
+			        "LoanType2", [LoanType2],
+			        "DueTo_RP2", [DueTo_RP2],
+			        "DueTo_RP1", [DueTo_RP1],
+			        "Deferred Revenue", [Deferred Revenue],
+			        "Total Other Liabilities", [Total Other Liabilities],
+			        "Total Liabilities", [Total Liabilities],
+			
+			        // Equity
+			        "Distributions_ShareholderA", [Distributions_ShareholderA],
+			        "Contributed Capital", [Contributed Capital],
+			        "Equity-Non Controlling Interest", [Equity-Non Controlling Interest],
+			        "Retained Earnings", [Retained Earnings],
+			        "Current Year Income", [Current Year Income],
+			        "Total Stockholder Equity", [Total Stockholder Equity],
+			        "Total Liabilities & Stockholders Equity", [Total Liabilities & Stockholders Equity],
+			
+			        "Variance - Out of Balance",
+			            CALCULATE(
+			                [VarianceOutOfBalance],
+			                ALL('FinancialStatementLines  Data BS')
+			            ),
+			
+			        BLANK()
+			    )
+			
+			VAR IsCategoryHeader = RIGHT ( TRIM ( item_ ), 1 ) = ":"
+			
+			RETURN
+			    IF ( IsCategoryHeader, "", RawVal )
+			```
+		lineageTag: 51c2868c-ee1d-41a8-883d-541a602cb525
+
+		changedProperty = Name
+
+	column 'MeasureName NAV BS'
+		dataType: string
+		lineageTag: 680580fa-0705-41f4-b5a2-4a7b6801b7d5
+		sourceLineageTag: MeasureName_NAV_BS
+		summarizeBy: none
+		sourceColumn: MeasureName_NAV_BS
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: fdaea17d-b025-44e2-b3b8-e1d22f8d56a9
+		sourceLineageTag: SortOrder
+		summarizeBy: none
+		sourceColumn: SortOrder
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column IsBold
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ab9bcc0f-da46-44a4-9810-0d5b18a20f19
+		sourceLineageTag: IsBold
+		summarizeBy: none
+		sourceColumn: IsBold
+
+		annotation SummarizationSetBy = Automatic
+
+	column IndentLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: e2764579-1543-4537-b141-85b05c790919
+		sourceLineageTag: IndentLevel
+		summarizeBy: none
+		sourceColumn: IndentLevel
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	partition 'FinancialStatementLines  Data BS' = entity
+		mode: directLake
+		source
+			entityName: FinancialStatementLines_BS
+			schemaName: dbo
+			expressionSource: 'DirectLake - DW_Ledger'
+
+	changedProperty = Name
+

@@ -1,0 +1,6027 @@
+/// Measures for Income Statement reports: Current, YTD (Year to Date) and YTD SPLY (Year to Date Same Period Last Year)
+table Measures_IncomeStatements
+	lineageTag: 7a657520-77e1-41a6-bd8c-51cdbee5282c
+
+	measure Debit_vs_Credit = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			  
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 9c91bc74-ce7b-4aa3-ad09-a26a5a61a134
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 24
+
+	measure SalesF = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) >= 30001 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 30999,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) >= 30001 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 30999,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  -1*(IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_))
+			
+			
+			
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 7d462cd8-6f32-4c2e-8297-f912ebc4f60e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 145
+
+	measure SalesNF = ```
+			
+			 
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 31000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 31989)
+			
+			        ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			    
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 31000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 31989)
+			
+			        ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			 -1*( IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 5a2e4924-3739-4053-b35f-52527ca7c01c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 148
+
+	measure DeliveryIncome = ```
+			
+			 
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 39901 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 39902),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			      
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 39901 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 39902)  ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 9e647c7f-d1ef-40a9-9ef1-d54a5850498d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 26
+
+	measure GrossSales = [Rental Income]+[Rental Income-Unrelated Parties]+[SalesF]+[SalesNF]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 8e81c344-8099-45fe-9982-88d4555eff2f
+
+		annotation TabularEditor_Order = 84
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure SettlementsAdjustments = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) = 40800 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =40800,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: a765444b-e9ef-46b3-b796-6e5946daaec6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 157
+
+	measure FreightRailroad = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) = 40996
+			    ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			      
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) = 40996
+			    ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			   
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 1078fa59-951e-4e0f-970f-c960c58808eb
+
+		annotation TabularEditor_Order = 71
+
+	measure FreightOut = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(
+			  (VALUE(L_Entries[AccountNoNumeric]) >= 40992 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 40995 )    
+			 || (VALUE(L_Entries[AccountNoNumeric]) IN {40997,4098,40999}))  ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			      
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(
+			  (VALUE(L_Entries[AccountNoNumeric]) >= 40992 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 40995 )    
+			 || (VALUE(L_Entries[AccountNoNumeric]) IN {40997,4098,40999}))  ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			   
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 9f819afa-06f8-49f4-a7e1-c99cdcefba0a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 67
+
+	measure CostOfSalesF = ```
+			
+			 
+			VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			        ALLEXCEPT(
+			            L_Entries,
+			            L_Entries[G_L_Account_No],
+			            L_Entries[Posting_Date]
+			        ),
+			        VALUE(L_Entries[AccountNoNumeric]) >= 40000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 40799 || VALUE(L_Entries[AccountNoNumeric])=40989,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			    )
+			
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			        ALLEXCEPT(
+			            L_Entries,
+			            L_Entries[G_L_Account_No],
+			            L_Entries[Posting_Date]
+			        ),
+			    VALUE(L_Entries[AccountNoNumeric]) >= 40000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 40799 || VALUE(L_Entries[AccountNoNumeric])=40989,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			    )
+			
+			RETURN
+			    DEBIT_ - CREDIT_
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 9c62a85c-3ed9-49cc-8a3a-13b37014ae61
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 18
+
+	measure CostOfSalesNF = ```
+			
+			 
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 41000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 41989),
+			   
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 41000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 41989),   
+			
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: df485f14-650d-4c65-80c6-6e93f88a8974
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 21
+
+	measure Facility\EnvironmentalFees = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =  42900,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =42900,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 90b6c42a-38d1-4bb1-b951-14065c2ec5e0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 49
+
+	measure PurchaseDiscounts = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =  42000,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =42000,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: a7655033-26a7-408f-8324-fb87e028e026
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 136
+
+	measure FreightOnSiteHaul = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =  40991,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =40991,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 27baa37d-fd90-42fe-85aa-e491759ed248
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 64
+
+	measure FreightIn = ```
+			
+			 
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			 (VALUE(L_Entries[AccountNoNumeric]) >= 40851 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 40860)|| VALUE(L_Entries[AccountNoNumeric])=40990  ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			 (VALUE(L_Entries[AccountNoNumeric]) >= 40851 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 40860)|| VALUE(L_Entries[AccountNoNumeric])=40990  ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: fdfd33b0-237f-45b8-85f0-162f29b3b332
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 61
+
+	measure CostOfSales = ```
+			[CostOfSalesF]+[CostOfSalesNF]+
+			[PurchaseDiscounts]+[Freight In-JS TRUCKING]+
+			[FreightIn] 
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 1cb20d8f-2c19-4af5-a8d7-2a9d2993859a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 15
+
+	measure NetSales = [GrossSales]+[SettlementsAdjustments]+[FreightRailroad]+[FreightOut]+[FreightOutCSX]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 7d3c2fac-e5a3-4b9b-8dc1-1e0d78969641
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 112
+
+	measure FreightOutCSX = 0
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 16e1d50f-85e5-482d-bd9a-8a71e0f16d72
+
+		annotation TabularEditor_Order = 70
+
+	measure GrossProfit = [NetSales]+[CostOfSales]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 87feb11c-3d76-4e23-bb52-68ff6f4e6dd4
+
+		annotation TabularEditor_Order = 80
+
+	measure GrossProfit% = DIVIDE([GrossProfit],[GrossSales],0)
+		formatString: 0.0%;(0.0%);"-"
+		displayFolder: 00-Totals
+		lineageTag: 5d646696-ac69-449a-a2dd-986041fc28d2
+
+		annotation TabularEditor_Order = 83
+
+	measure Wages = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 50001 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 50600)
+			  ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			        
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 50001 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 50600)
+			    ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			 
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: afd37e1f-8b58-48dd-9d89-52c35cf45869
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 213
+
+	measure PayrollRelatedCosts_Oper = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) =51061
+			),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) =51061      
+			) ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			 )
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: fac8cf13-10db-46ae-80a3-d2d080372c4f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 127
+
+	measure YardRepairAndMaintenance = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) IN {85645,85660,86845,62045},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) IN {85645,85660,86845,62045},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: c7dcb6ef-f8e6-4f53-b8ca-66a823e9457c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 216
+
+	measure FuelOxygenEtc = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=55000)&&(VALUE(L_Entries[AccountNoNumeric]) <=55045)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) >=55200)&&(VALUE(L_Entries[AccountNoNumeric]) <=55399)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) >=55100)&&(VALUE(L_Entries[AccountNoNumeric]) <=55199),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=55000)&&(VALUE(L_Entries[AccountNoNumeric]) <=55045)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) >=55200)&&(VALUE(L_Entries[AccountNoNumeric]) <=55399)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) >=55100)&&(VALUE(L_Entries[AccountNoNumeric]) <=55199),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 39f84360-63a7-41e3-ba4e-402ae4b421df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 74
+
+	measure Utilities = ```
+			
+			
+			   VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			      (VALUE(L_Entries[AccountNoNumeric]) >=87860)&&(VALUE(L_Entries[AccountNoNumeric]) <=87890)
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			      (VALUE(L_Entries[AccountNoNumeric]) >=87860)&&(VALUE(L_Entries[AccountNoNumeric]) <=87890)
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 2c835763-82c5-4900-99f9-c8a31c24a9a7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 209
+
+	measure MechanicalParts = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=56000)&&(VALUE(L_Entries[AccountNoNumeric]) <=56050)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) =59006),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=56000)&&(VALUE(L_Entries[AccountNoNumeric]) <=56050)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) =59006),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: de2468bf-3c05-4349-976e-57ee2611273c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 101
+
+	measure RepairsAndMaintenance = ```
+			
+			
+			   VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=62000)&&(VALUE(L_Entries[AccountNoNumeric]) <=62044)||
+			(VALUE(L_Entries[AccountNoNumeric]) >=62046)&&(VALUE(L_Entries[AccountNoNumeric]) <=62049)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) =62051) ||
+			(VALUE(L_Entries[AccountNoNumeric]) =64120)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) =83011)||
+			(VALUE(L_Entries[AccountNoNumeric]) =83000 )
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			     (VALUE(L_Entries[AccountNoNumeric]) >=62000)&&(VALUE(L_Entries[AccountNoNumeric]) <=62044)||
+			(VALUE(L_Entries[AccountNoNumeric]) >=62046)&&(VALUE(L_Entries[AccountNoNumeric]) <=62049)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) =62051) ||
+			(VALUE(L_Entries[AccountNoNumeric]) =64120)
+			||
+			(VALUE(L_Entries[AccountNoNumeric]) =83011)||
+			(VALUE(L_Entries[AccountNoNumeric]) =83000 )
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			
+			
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 290768a6-1387-472f-879c-3af6fc269b45
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 139
+
+	measure StorageRailcars = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) =62050) ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) =62050) ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 5e7b25ac-ba0a-40d6-886b-6f360df17857
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 160
+
+	measure SuppliesAndMiscellaneous = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=62100)&&(VALUE(L_Entries[AccountNoNumeric]) <=62245)
+			,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=62100)&&(VALUE(L_Entries[AccountNoNumeric]) <=62245)
+			,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 43204c72-6b6b-4a1f-845e-1c274eaf7cc8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 163
+
+	measure EquipmentRental = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=63000)&&(VALUE(L_Entries[AccountNoNumeric]) <=63140),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=63000)&&(VALUE(L_Entries[AccountNoNumeric]) <=63140),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 2a226b90-2114-4de3-b24c-fc48bfa04f06
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 46
+
+	measure FluffLandfillExpenses = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) =64035),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) =64035),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: c828b4f2-ae36-4030-87b4-0bab180a6792
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 56
+
+	measure FluffFreight = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) =64135),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) =64135),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 02-Operating Costs- Plant/Yard
+		lineageTag: 3c889549-1399-43d7-80de-63429e6264f6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 53
+
+	measure Salaries = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=70000 && VALUE(L_Entries[AccountNoNumeric])<=70999 ),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=70000 && VALUE(L_Entries[AccountNoNumeric])<=70999 ),
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: 6a95bae0-b72b-4ae0-a35b-3d4f8f0f6731
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 142
+
+	measure PayrollRelatedCosts_Adm = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=71000 && VALUE(L_Entries[AccountNoNumeric])<=72060 )||
+			//(VALUE(G_LEntries[AccountNoNumeric]) >=87690 && VALUE(G_LEntries[AccountNoNumeric])<=87695 )||
+			VALUE(L_Entries[AccountNoNumeric])=51200 || VALUE(L_Entries[AccountNoNumeric])=51260 || VALUE(L_Entries[AccountNoNumeric])=51060 ||
+			VALUE(L_Entries[AccountNoNumeric])=83002 || VALUE(L_Entries[AccountNoNumeric])=51250,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric]) >=71000 && VALUE(L_Entries[AccountNoNumeric])<=72060 )||
+			//(VALUE(G_LEntries[AccountNoNumeric]) >=87690 && VALUE(G_LEntries[AccountNoNumeric])<=87695 )||
+			VALUE(L_Entries[AccountNoNumeric])=51200 || VALUE(L_Entries[AccountNoNumeric])=51260 || VALUE(L_Entries[AccountNoNumeric])=51060 ||
+			VALUE(L_Entries[AccountNoNumeric])=83002 || VALUE(L_Entries[AccountNoNumeric])=51250,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			) 
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: 31d1fd96-5e5d-4e4d-b3ed-86631e5b8fbc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 124
+
+	measure ProfessionalFees = ```
+			
+			
+			   VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=84020 && VALUE(L_Entries[AccountNoNumeric]) <=84465)
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			(VALUE(L_Entries[AccountNoNumeric]) >=84020 && VALUE(L_Entries[AccountNoNumeric]) <=84465)
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: b54d2e7e-fae4-46f7-9317-f4de5c9b6955
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 130
+
+	measure BadDebts = ```
+			
+			
+			VAR DEBIT_=
+			CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])=89500 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			VAR CREDIT_= 
+			CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])=89500,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: 17d4d9f7-0992-499e-8321-6c2b3fffe21d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 6
+
+	measure Insurance = ```
+			
+			
+			   VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			        (VALUE(L_Entries[AccountNoNumeric]) in {81800,81161,83500} )|| (VALUE(L_Entries[AccountNoNumeric])>=85140 && VALUE(L_Entries[AccountNoNumeric])<=85145) ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			       (VALUE(L_Entries[AccountNoNumeric]) in {81800,81161,83500} )|| (VALUE(L_Entries[AccountNoNumeric])>=85140 && VALUE(L_Entries[AccountNoNumeric])<=85145),L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: c2922a5e-2859-46da-b798-41f647bff259
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 91
+
+	measure Telephone = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			(VALUE(L_Entries[AccountNoNumeric])>=87760 && VALUE(L_Entries[AccountNoNumeric])<=87770)
+			|| VALUE(L_Entries[AccountNoNumeric])=82500,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric])>=87760 && VALUE(L_Entries[AccountNoNumeric])<=87770)
+			|| VALUE(L_Entries[AccountNoNumeric])=82500,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: a7f47fa9-a283-4b08-a009-201d054d9a56
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 166
+
+	measure TravelAndEntertainment = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])=83003 ||
+			(VALUE(L_Entries[AccountNoNumeric])>=87600 && VALUE(L_Entries[AccountNoNumeric])<=87675)
+			|| VALUE(L_Entries[AccountNoNumeric])=83001,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])=83003 ||
+			(VALUE(L_Entries[AccountNoNumeric])>=87600 && VALUE(L_Entries[AccountNoNumeric])<=87675)
+			|| VALUE(L_Entries[AccountNoNumeric])=83001,
+			
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: ec76b14e-2add-43c2-8f13-72a2c0fe12fd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 206
+
+	measure OfficeClerical = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {82860,82865,83260.80060},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {82860,82865,83260.80060},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: b3489b47-bd23-41b0-89c5-d65f360c7adf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 115
+
+	measure PropertyRents = ```
+			
+			
+			       VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])=83004
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])=83004
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: fb92025b-43bf-4ee0-8025-b288d04af4da
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 133
+
+	measure Security = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])>=87045 && VALUE(L_Entries[AccountNoNumeric])<=87060 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])>=87045 && VALUE(L_Entries[AccountNoNumeric])<=87060 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: 4a0ef6c0-9562-4524-93e2-c8f8412fbb23
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 154
+
+	measure Miscellaneous = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in 
+			{81000,81645,83015,89300,83005,83014,81660,83360,88260,89025,89150,89400,81655,87040,81160,82000,87460,87575,87680,89000,89060,89600,89500,87760}
+			,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in 
+			{81000,81645,83015,89300,83005,83014,81660,83360,88260,89025,89150,89400,81655,87040,81160,82000,87460,87575,87680,89000,89060,89600,89500,87760}
+			,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: 2254b460-acc1-41da-a017-1c093e9b16ed
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 104
+
+	measure Deprec&Amort = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81500,81550},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81500,81550},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 04-Depreciation & Amortization
+		lineageTag: 7312bee1-c325-411e-b852-80e6eb21fd88
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 31
+
+	measure Deprec&Amort-ShareholderA_PushDown = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81465,81575},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81465,81575},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 04-Depreciation & Amortization
+		lineageTag: 78700816-75d4-4888-bbef-c4a469f00210
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 28
+
+	measure Amortization-Goodwill =
+			
+			
+			VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) =81580
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) =81580
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 04-Depreciation & Amortization
+		lineageTag: d7c1daa5-ef5f-4620-bceb-7cd9e71b5c54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 0
+
+	measure Interest(Expense) = ```
+			
+			
+			  VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])in {83010,89200,89000}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])in {83010,89200,89000}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 0dee04f8-85aa-43c7-a9be-c85e60a0b5bb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 94
+
+	measure 'Total Operating Costs-Plant/Yard' =
+			
+			[Wages]+[PayrollRelatedCosts_Oper]+[YardRepairAndMaintenance]+[FuelOxygenEtc]+[Utilities]+[MechanicalParts]+[RepairsAndMaintenance]+[StorageRailcars]+[EquipmentRental]+
+			[SuppliesAndMiscellaneous]+[FluffLandfillExpenses]+[FluffFreight]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: c05d56e2-a654-4a88-be05-ac879988bbe4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 193
+
+	measure 'Total Operating Cost Administration' =
+			
+			[Salaries]+[PayrollRelatedCosts_Adm]+[ProfessionalFees]+[Bank Fees]+[Insurance]+[Taxes-Real Estate & Property]
+			+[TravelAndEntertainment]+[OfficeClerical]+[PropertyRents]+[Security]+[Miscellaneous]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 8256ee1a-6af9-4879-b28d-493c0bc944dd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 190
+
+	measure InterestIncome = ```
+			
+			  VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])in {36000}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])in {36000}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: d8b219c1-a72d-431f-98ae-208794ca95a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 97
+
+	measure 'Other Income(Expense)' =
+			
+			
+			VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) in {39900,39998,39999}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) in {39900,39998,39999}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 7952415c-1bcc-4085-b113-54e9db7c06cd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 118
+
+	measure 'Gain Loss on Disposals' = ```
+			
+			  VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])>= 89100 && VALUE(L_Entries[AccountNoNumeric])<=89150
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric])>= 89100 && VALUE(L_Entries[AccountNoNumeric])<=89150
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 190566bb-313b-4ff4-8231-87d230329714
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 77
+
+	measure 'DISC Commission(Expense)' = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])in {89900},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])in {89900},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 16fed78e-9524-4476-a36c-f3e4582732c0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 37
+
+	measure 'P&L NonControllingInterest' = ```
+			
+			 VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) in {89945}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) in {89945}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 73864bb6-f4ed-425c-b4cb-e0f2755defec
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 121
+
+	measure LossOnExtinguishmentOfDebt = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])in {89915},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric])in {89915},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 61340bc7-7329-4079-b362-2c6812988973
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 98
+
+	measure IncomeTaxes = ```
+			
+			 VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) in {90000}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) in {90000}
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: b0669edb-55fb-46fc-9d05-c2d795145f33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 88
+
+	measure 'Total Other Income (Expense)' = ```
+			
+			[Interest(Expense)]+[InterestIncome]+[Other Income(Expense)]+[Gain Loss on Disposals]+[P&L NonControllingInterest]+[IncomeTaxes]
+			
+			 
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 91e1edcb-051b-4846-90fd-de2b188e30c9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 196
+
+	measure 'Total Expense' = ```
+			
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			    L_Entries[Gen_Posting_Type] IN {"Expense", "Purchase"}
+			)
+			
+			
+			/*
+			 [Total Other Income (Expense)]+ [TotalDepreciation&Amortization]
+			
+			 +[Total Operating Cost Administration]
+			 +[Total Operating Costs-Plant/Yard]    */
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 251e6c07-c283-4f8f-a5fa-c2896901b097
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 181
+
+	measure TotalDepreciation&Amortization = [Amortization-Goodwill]+[Depreciation and Amortization]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: a9de3cb5-cd66-4d16-8168-1865d74fe2d2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 202
+
+	measure 'Total Income-BeforeTax&Bonuses' = [GrossProfit]- [Total Expense]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: e6c6c4d0-3c9c-486f-b925-833be26607f4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 184
+
+	measure EBITDA =
+			
+			//[TotalDepreciation&Amortization]+[Net Income]
+			[Net Income]+[P&L NonControllingInterest]+abs([Interest(Expense)])+[TotalDepreciation&Amortization]
+			
+			//[Total Int Tax Deprec Amort]+[Net Income]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: fc0ad3b4-3552-4fde-9897-e3db0f7a71bd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 40
+
+	measure EBITDA+DISC = ABS([EBITDA])-[DISC Commission(Expense)]
+		formatString: $#,0;($#,0)
+		isHidden
+		displayFolder: 00-Totals
+		lineageTag: f958679a-a3ef-451f-a764-5133421de193
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 43
+
+	measure 'Net Income After Taxes' = ```
+			
+			VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			        VALUE(L_Entries[AccountNoNumeric]) >= 30000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 99999,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			        VALUE(L_Entries[AccountNoNumeric]) >= 30000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 99999,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0)
+			
+			
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: b3733829-220e-4718-97a1-ed1a817fe145
+
+		annotation TabularEditor_Order = 109
+
+	measure 'Variance - Out of Balance' = ```
+			[Net Income]+[Net Income After Taxes]
+			
+			```
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 7332d030-b4a8-4484-aab8-4fe4d9118df0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 212
+
+	measure 'TonsSold F' =
+			
+			VAR DEBIT_ =
+			    CALCULATE (
+			        SUM ( L_Entries[Debit_Amount] ),
+			
+			        ALLEXCEPT (
+			            L_Entries,
+			            L_Entries[G_L_Account_No],
+			            L_Entries[Posting_Date],
+			            L_Entries[Business_Unit_Code]
+			        ),
+			
+			        L_Entries[G_L_Account_No]
+			            IN { "TNS-IC-FER", "TNS-OS-FER" },
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			    )
+			
+			VAR CREDIT_ =
+			    CALCULATE (
+			        SUM ( L_Entries[Credit_Amount] ),
+			
+			        ALLEXCEPT (
+			            L_Entries,
+			            L_Entries[G_L_Account_No],
+			            L_Entries[Posting_Date],
+			            L_Entries[Business_Unit_Code]
+			        ),
+			
+			        L_Entries[G_L_Account_No]
+			            IN { "TNS-IC-FER", "TNS-OS-FER" },
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			    )
+			
+			RETURN
+			    COALESCE ( DEBIT_, 0 )
+			        - COALESCE ( CREDIT_, 0 )
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 6266eb08-c924-42c4-8370-8c243f927835
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 174
+
+	measure 'Tons Sold-NF' = ```
+			
+			
+			VAR DEBIT_ =
+			    CALCULATE (
+			        SUM ( L_Entries[Debit_Amount] ),
+			
+			        ALLEXCEPT (
+			            L_Entries,
+			            L_Entries[G_L_Account_No],
+			            L_Entries[Posting_Date], L_Entries[Business_Unit_Code]
+			        ),
+			
+			        L_Entries[G_L_Account_No]
+			            in {"TNS-IC-NF","TNS-OS-NF"},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			    )
+			
+			VAR CREDIT_ =
+			    CALCULATE (
+			        SUM ( L_Entries[Credit_Amount] ),
+			
+			        ALLEXCEPT (
+			            L_Entries,
+			            L_Entries[G_L_Account_No],
+			            L_Entries[Posting_Date], L_Entries[Business_Unit_Code]
+			        ),
+			
+			        L_Entries[G_L_Account_No]
+			            IN  {"TNS-IC-NF","TNS-OS-NF"},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			        )
+			    
+			
+			RETURN
+			    COALESCE ( DEBIT_, 0 )
+			        - COALESCE ( CREDIT_, 0 )
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: ca2dd221-cdbc-4e72-a3e3-829f6ba64773
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 173
+
+	measure 'Tons Sold Recovery' = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			L_Entries[G_L_Account_No]in {"TNS-IC-REC","TNS-OS-REC"},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			L_Entries[G_L_Account_No]in {"TNS-IC-REC","TNS-OS-REC"},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 0799a90e-406c-47bb-b242-843039b21c16
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 172
+
+	measure 'Total Tons Sold' = [TonsSold F]+[Tons Sold-NF]+[Tons Sold Recovery]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 45eb323c-b359-4a64-a75d-9d571ee5e12b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 199
+
+	measure EmployeeCount = ```
+			
+			VAR MaxDate =
+			    MAX(DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE(
+			    SUM(L_Entries[Amount]),
+			    L_Entries[G_L_Account_No] = "EMPCOUNT",
+			
+			    REMOVEFILTERS(DimCalendar),   -- ✅ remove date filter only
+			
+			    L_Entries[Posting_Date] <= MaxDate   -- ✅ apply cumulative logic
+			)
+			
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 590af6b1-f01b-4728-8974-91a38e596e59
+
+		annotation TabularEditor_Order = 44
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure HoursWorked = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			L_Entries[G_L_Account_No]in {"HRSOT","HRSPTO","HRSREG"},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			L_Entries[G_L_Account_No]in {"HRSOT","HRSPTO","HRSREG"},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 7f035a27-7912-4562-b48b-10eb6a84ccc8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 87
+
+	measure 'Net Assets' = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric])>=10000 && VALUE(L_Entries[AccountNoNumeric])<=19499)||
+			(VALUE(L_Entries[AccountNoNumeric])>=19800 && VALUE(L_Entries[AccountNoNumeric])<=19999)||
+			(VALUE(L_Entries[AccountNoNumeric])>=20000 && VALUE(L_Entries[AccountNoNumeric])<=23100)||
+			VALUE(L_Entries[AccountNoNumeric])=24150,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric])>=10000 && VALUE(L_Entries[AccountNoNumeric])<=19499)||
+			(VALUE(L_Entries[AccountNoNumeric])>=19800 && VALUE(L_Entries[AccountNoNumeric])<=19999)||
+			(VALUE(L_Entries[AccountNoNumeric])>=20000 && VALUE(L_Entries[AccountNoNumeric])<=23100)||
+			VALUE(L_Entries[AccountNoNumeric])=24150,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			)  
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: e46942e8-3bd1-4a1c-aa9a-5548abb8b410
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 107
+
+	measure 'TonsSold-F YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [TonsSold F],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: ac9cc358-b8dd-4a4a-8f4d-64413fb7fb3e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 175
+
+	measure 'TonsSold-F YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [TonsSold F],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: dd145d10-65fa-4cb6-bf29-5eb82fb4e072
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 176
+
+	measure 'TonsSold-NF YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Tons Sold-NF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 32311a67-b482-41ee-a944-e66025234fbc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 177
+
+	measure 'TonsSold-NF YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Tons Sold-NF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: a44f2425-bcdb-426e-8fcc-1f6191d70030
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 178
+
+	measure 'TonsSold-Recovery YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Tons Sold Recovery],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 643e1d42-bf9e-424c-a9d1-1126eec24738
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 179
+
+	measure 'TonsSold-Recovery YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Tons Sold Recovery],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 224bbe03-f081-491d-aaed-74abde49c621
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 180
+
+	measure 'Ton NF&Recovery' = [Tons Sold-NF]+[Tons Sold Recovery]
+		formatString: #,0.0;(#,0.0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: e51c52a4-be3c-438a-9413-64af1302b831
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 169
+
+	measure 'Ton Non-F&R YTD' = [TonsSold-NF YTD]+[TonsSold-Recovery YTD]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 2cff2ac7-263e-4407-a9d7-70e04a30ac29
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 170
+
+	measure 'Ton NF&Recovery YTD SPLY' = [TonsSold-NF YTD SPLY]+[TonsSold-Recovery YTD SPLY]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: a76e9621-d2f6-406a-bdef-116ea2b4ba71
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 171
+
+	measure 'DeliveryIncome YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [DeliveryIncome],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 0d79b072-923a-4a08-a1f5-9cab6f134051
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 27
+
+	measure 'Delivery Income YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [DeliveryIncome],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 6c14385f-1be9-4528-b1d9-18d0dc9eea93
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 25
+
+	measure 'SettlementsAdjustments YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [SettlementsAdjustments],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: a0e47f74-629a-4f04-861a-985278b3c6ec
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 158
+
+	measure 'SettlementsAdjustments YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [SettlementsAdjustments],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 491ff04c-e955-4b7e-a6ab-b66f6e3135b2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 159
+
+	measure 'FreightRailroad YTD' = 0
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 312d0f34-f8cf-4683-abe4-792c480ce1b4
+
+		annotation TabularEditor_Order = 72
+
+	measure 'FreightRailroad YTD SPLY' = 0
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: a439bb9b-77d9-4714-93ff-cdbd9dce66ff
+
+		annotation TabularEditor_Order = 73
+
+	measure 'FreightOut YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [FreightOut],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 1f5b6fe3-5bdb-4787-b656-01b4024e880c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 68
+
+	measure 'FreightOut YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [FreightOut],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: f54f9e7b-1c4b-4f01-a577-91ff2f2f35ca
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 69
+
+	measure 'Freight Out CSX YTD' = 0
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 325d0a49-7935-4553-abd6-427a33d2f026
+
+		annotation TabularEditor_Order = 59
+
+	measure 'Freight Out CSX YTD SPLY' = 0
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: dfb5c793-135e-4800-b5f6-08a540f4d92e
+
+		annotation TabularEditor_Order = 60
+
+	measure 'CostOfSalesF YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [CostOfSalesF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 0056e47c-4c14-4d71-8378-75f42ddacbea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 19
+
+	measure 'CostOfSalesF YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [CostOfSalesF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 8e39974d-a6c3-4063-9218-1b7d5a89d52e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 20
+
+	measure 'CostOfSalesNF YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [CostOfSalesNF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: dc20dc2c-8f86-44e6-a15b-605f70306358
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 22
+
+	measure 'CostOfSalesNF YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [CostOfSalesNF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: dee669eb-fea1-49b0-ae03-2c682d7f6feb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 23
+
+	measure 'Facility\EnvironmentalFees YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Facility\EnvironmentalFees],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 8639f11c-e5f2-4e8a-acc1-93ab58ecd9db
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 50
+
+	measure 'Facility\EnvironmentalFees YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Facility\EnvironmentalFees],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 253f3ca2-0126-482a-83ad-bd4802680222
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 51
+
+	measure 'PurchaseDiscounts YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [PurchaseDiscounts],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: aa6d1d8f-c59f-4cda-a9c1-f62dba50aab2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 137
+
+	measure 'PurchaseDiscounts YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [PurchaseDiscounts],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: f2d385ff-42c7-43df-8bad-b2f0b25a57d8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 138
+
+	measure 'FreightOnSiteHaul YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [FreightOnSiteHaul],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 843ecd5a-eb0d-4b7e-9cf8-49dab652e463
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 65
+
+	measure 'FreightOnSiteHaul YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [FreightOnSiteHaul],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 51df0b6b-97b2-4090-ab57-35f27aba9ffd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 66
+
+	measure 'FreightIn YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [FreightIn],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 909eb312-43d3-4801-9428-b5a003427628
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 62
+
+	measure 'FreightIn YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [FreightIn],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: d84d1a47-575a-4928-aa21-37e5212f71d2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 63
+
+	measure 'SalesF YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [SalesF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: c9089d14-69b0-4467-9ae2-d9d315417f44
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 146
+
+	measure 'SalesF YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [SalesF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: b0870afd-0729-401d-8e46-756f996efe23
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 147
+
+	measure 'SalesNF YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [SalesNF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: f6c17854-4917-4a52-bde4-26ffe52bf9ac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 149
+
+	measure 'SalesNF YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [SalesNF],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: b83938d1-c999-4551-8c1f-edab812e852d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 150
+
+	measure 'Wages YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Wages],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: dfd9b10b-2093-4f74-a751-7a0f777b68a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 214
+
+	measure 'Wages YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Wages],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 252de508-6f62-49db-9418-1c02096f6e6d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 215
+
+	measure 'PayrollRelatedCosts_Oper YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [PayrollRelatedCosts_Oper],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: eaa6d52d-9908-477c-be9e-5a351fac5531
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 128
+
+	measure 'PayrollRelatedCosts_Oper YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [PayrollRelatedCosts_Oper],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: bda8e6ad-6088-4313-9b24-2fe79ed6f986
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 129
+
+	measure 'YardRepairAndMaintenance YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [YardRepairAndMaintenance],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: d4a041f5-12ed-4af7-922f-4abdea98c0f3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 217
+
+	measure 'YardRepairAndMaintenance YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [YardRepairAndMaintenance],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 4d4b9f14-5597-4ba4-bccf-f32b2c4c453b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 218
+
+	measure 'FuelOxygenEtc YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [FuelOxygenEtc],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 2ac8c368-268d-4c08-8731-044d1d27c57a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 75
+
+	measure 'FuelOxygenEtc YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [FuelOxygenEtc],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 05515062-9766-4358-90e7-2121ffcd73a6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 76
+
+	measure 'Utilities YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Utilities],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 4fc577f2-6fc9-4b16-a807-fd2972baf10f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 210
+
+	measure 'Utilities YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Utilities],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: beeabb70-746d-4408-949e-a149a8181d02
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 211
+
+	measure 'MechanicalParts YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [MechanicalParts],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 30b7dc56-9b5c-4e96-8340-2cd0c47a6365
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 102
+
+	measure 'MechanicalParts YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [MechanicalParts],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: ea32c53f-3c07-4239-9f46-3eb086f008ff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 103
+
+	measure 'RepairsAndMaintenance YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [RepairsAndMaintenance],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: c6b412f4-c8ed-46f6-82fa-f4d748fa36e5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 140
+
+	measure 'RepairsAndMaintenance YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [RepairsAndMaintenance],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 163bac9e-f280-409e-a901-74a34305f90a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 141
+
+	measure 'StorageRailcars YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [StorageRailcars],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 0b1c5960-fbb1-4ee7-8b09-9842fa20711f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 161
+
+	measure 'StorageRailcars YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [StorageRailcars],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 73c095af-71d8-4650-9c1d-5cf9c3e61d7f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 162
+
+	measure 'EquipmentRental YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [EquipmentRental],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: e0af9eaa-3f7e-48ac-a7d2-a69f71cf41e0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 47
+
+	measure 'EquipmentRental YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [EquipmentRental],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: c2b10a3b-6d26-4048-bf13-13bd9da8dd05
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 48
+
+	measure 'SuppliesAndMiscellaneous YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [SuppliesAndMiscellaneous],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 841fd0dc-9a88-4718-81d9-cbfe04da6303
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 164
+
+	measure 'SuppliesAndMiscellaneous YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [SuppliesAndMiscellaneous],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 393e841b-c1aa-40ff-a52f-fc55b63f5b46
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 165
+
+	measure 'FluffLandfillExpenses YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [FluffLandfillExpenses],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: d0948ce2-52ed-4999-ac28-6501f0f82dbc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 57
+
+	measure 'FluffLandfillExpenses YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [FluffLandfillExpenses],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: a6b6ea0d-a294-4a2c-a2e0-266ef504b2d2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 58
+
+	measure 'FluffFreight YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [FluffFreight],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: ea3864cc-2bdf-439e-8923-846dfbf66899
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 54
+
+	measure 'FluffFreight YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [FluffFreight],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: a7533635-2e8b-4968-98a4-7a911896c954
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 55
+
+	measure 'Salaries YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Salaries],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 81874f8f-9cc5-4612-9cd8-5de159f3617b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 143
+
+	measure 'Salaries YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Salaries],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: bef47d6b-0a24-46be-9cc9-0317449cd09a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 144
+
+	measure 'PayrollRelatedCosts_Adm YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [PayrollRelatedCosts_Adm],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: eba84fdc-2a06-4c31-a411-5079f714ad17
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 125
+
+	measure 'PayrollRelatedCosts_Adm YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [PayrollRelatedCosts_Adm],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 033c6afb-764b-4d76-ae7a-bbff93c58a9e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 126
+
+	measure 'ProfessionalFees YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [ProfessionalFees],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 1fd43f13-7f7c-4041-a614-72844bce4324
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 131
+
+	measure 'ProfessionalFees YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [ProfessionalFees],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 1ebb26ed-aec3-482c-84f8-6d27a3cda0c1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 132
+
+	measure 'BadDebts YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [BadDebts],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: f403d646-744d-4c20-a4c0-392c43fa18a6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 7
+
+	measure 'BadDebts YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [BadDebts],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: b0b8f7f7-1ed9-4747-a02a-d95ff7b77b03
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 8
+
+	measure 'Insurance YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Insurance],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 59634413-4c61-4048-970b-1c07212d2b99
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 92
+
+	measure 'Insurance YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Insurance],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: dba939ec-aec8-44e1-87c7-1bae884928fa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 93
+
+	measure 'Telephone YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Telephone],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 5fb7f26a-298c-4769-a952-4eb44c40ff01
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 167
+
+	measure 'Telephone YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Telephone],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 935e237b-1dac-4448-9919-932dfcca9af8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 168
+
+	measure 'TravelAndEntertainment YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [TravelAndEntertainment],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: edc506ed-249e-40dd-8246-75148e7c9c55
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 207
+
+	measure 'TravelAndEntertainment YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [TravelAndEntertainment],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: cd5dfd91-dca9-4932-b38d-d8ecdc434ca2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 208
+
+	measure 'OfficeClerical YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [OfficeClerical],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: f8dfbd45-51c0-4ecf-99da-598209ba5725
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 116
+
+	measure 'OfficeClerical YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [OfficeClerical],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 10bef93d-84b1-497b-8ed5-cb665f11304a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 117
+
+	measure 'PropertyRents YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [PropertyRents],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 1e293d6b-2353-4ba4-9de2-1a1ac7baa8b8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 134
+
+	measure 'PropertyRents YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [PropertyRents],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 733b707b-8395-45c0-99a2-b91b23caf25c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 135
+
+	measure 'Security YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Security],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: a0d9b963-9d18-4a53-9967-6813292e7444
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 155
+
+	measure 'Security YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Security],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 7f24a009-7179-41e5-b65e-857c2ced2ae0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 156
+
+	measure 'Miscellaneous YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Miscellaneous],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: e687c481-5bc9-4b19-9271-47dec0fe1547
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 105
+
+	measure 'Miscellaneous YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Miscellaneous],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: c24df193-e231-4e0a-8e67-95e4d9ac408d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 106
+
+	measure 'Deprec&Amort YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Deprec&Amort],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 28711e3c-49a5-4bc2-b182-0db2bba0dc1c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 32
+
+	measure 'Deprec&Amort YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Deprec&Amort],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 27640a09-3956-41d6-8103-4f3491754f33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 33
+
+	measure 'Deprec&Amort-ShareholderA_PushDown YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Deprec&Amort-ShareholderA_PushDown],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: f943ab13-1f09-43fb-965d-566b63f4f8cf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 29
+
+	measure 'Deprec&Amort-ShareholderA_PushDown YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Deprec&Amort-ShareholderA_PushDown],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 516bf30d-e9cc-47b2-8740-7f0b2c65a241
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 30
+
+	measure 'Amortization-Goodwill YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Amortization-Goodwill],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 10448d01-751a-4a4a-adac-84af000c11e1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 1
+
+	measure 'Amortization-Goodwill YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Amortization-Goodwill],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: b6620492-04cf-4143-aa56-6b2a93e8797f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 2
+
+	measure 'EmployeeCount SPLY' =
+			
+			VAR MaxDateLY =
+			    MAXX (
+			        SAMEPERIODLASTYEAR ( DimCalendar[CalendarDate] ),
+			        DimCalendar[CalendarDate]
+			    )
+			
+			RETURN
+			CALCULATE (
+			    SUM ( L_Entries[Amount] ),
+			    L_Entries[G_L_Account_No] = "EMPCOUNT",
+			
+			    FILTER (
+			        ALL ( L_Entries[Posting_Date] ),
+			        L_Entries[Posting_Date] <= MaxDateLY
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: fc5ba3d4-096c-4f4b-8a1a-1cd6f43a6cc2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 45
+
+	measure 'Interest(Expense) YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Interest(Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: ee5071e0-f2fd-4007-87ae-96e9a83df2c2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 95
+
+	measure 'Interest(Expense) YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Interest(Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 7b7a3282-c046-4fe0-a879-9feb7bbabcc5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 96
+
+	measure 'Other Income(Expense) YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Other Income(Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: a1765f81-8b06-43e7-b674-1118c4b46b54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 119
+
+	measure 'Other Income(Expense) YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Other Income(Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 87631103-5063-4a3a-8931-c0ed583efa73
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 120
+
+	measure 'Gain Loss on Disposals YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Gain Loss on Disposals],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 976c40ef-41ae-4608-934d-45f03c43e2fa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 78
+
+	measure 'Gain Loss on Disposals YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Gain Loss on Disposals],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: f8f693aa-0364-4d28-8e60-40b2d9110413
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 79
+
+	measure 'DISC Commission(Expense) YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [DISC Commission(Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 7df67f3e-5adf-41a4-b96b-9b22ad2e045a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 38
+
+	measure 'DISC Commission(Expense) YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [DISC Commission(Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 2cdae1be-0920-4761-99d3-0046f347f3c0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 39
+
+	measure 'LossOnExtinguishmentOfDebt YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [LossOnExtinguishmentOfDebt],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 02c6d52c-8b77-47cc-a036-75b4a39d17da
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 99
+
+	measure 'LossOnExtinguishmentOfDebt YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [LossOnExtinguishmentOfDebt],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 33b492ac-6d42-4c3b-8ae3-77c60309707c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 100
+
+	measure 'P&L NonControllingInterest YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [P&L NonControllingInterest],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 108b6100-dc49-402f-b3dc-fde8f343d39d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 122
+
+	measure 'P&L NonControllingInterest YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [P&L NonControllingInterest],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: f1a0b312-1fa5-455c-be10-369d40685af0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 123
+
+	measure 'IncomeTaxes YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [IncomeTaxes],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 1b7cdfcd-d76e-49f2-a78e-470f2ec6c200
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 89
+
+	measure 'IncomeTaxes YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [IncomeTaxes],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: cd4e0549-905a-4028-8f1f-2e28a99da2f9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 90
+
+	measure 'Total Tons Sold YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Tons Sold],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 1a29a457-aee5-4d84-83af-0e25b399bafd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 200
+
+	measure 'Total Tons Sold YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Tons Sold],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: e1280f22-4345-4997-b119-6bc9e0acf8e6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 201
+
+	measure 'GrossSales YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [GrossSales],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 95c04f83-efe6-4597-8d74-46ff29f4a432
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 85
+
+	measure 'GrossSales YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [GrossSales],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 9bcf6c43-1be3-44c5-906d-2f11e0ca7a2a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 86
+
+	measure 'NetSales YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [NetSales],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: b4f334ad-0b2e-476d-b55d-b86ec5d75def
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 113
+
+	measure 'NetSales YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [NetSales],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: a6897db5-f10c-4ae9-b35e-3fee342376ca
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 114
+
+	measure BonusesPaid = 0
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: bc51b17f-d151-4b2f-ba79-9e77add278a0
+
+		annotation TabularEditor_Order = 9
+
+	measure 'BonusesPaid YTD' = 0
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: b918f7ac-17bc-4719-af36-9d786bade702
+
+		annotation TabularEditor_Order = 10
+
+	measure 'BonusesPaid YTD SPLY' = 0
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: ace80609-2a6f-4cb1-8623-0007a75647c1
+
+		annotation TabularEditor_Order = 11
+
+	measure 'CostOfSales YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [CostOfSales],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: dd5fdc31-ac80-4ff9-97b0-8a46240f5c7b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 16
+
+	measure 'CostOfSales YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [CostOfSales],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 9d983a33-92ad-478a-bf8c-b8de4582d922
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 17
+
+	measure 'GrossProfit YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [GrossProfit],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: eb662eb9-b084-4fde-8af1-6912a5282f12
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 81
+
+	measure 'GrossProfit YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [GrossProfit],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 9fe6a0da-5fbd-4130-b21a-772695941201
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 82
+
+	measure 'Total Operating Costs-Plant/Yard YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Operating Costs-Plant/Yard],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: b09e4fe9-00a4-43cb-bea9-cbe18679fefa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 194
+
+	measure 'Total Operating Costs-Plant/Yard YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Operating Costs-Plant/Yard],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 90037de2-1c62-4923-a7ad-b45c33f5b99b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 195
+
+	measure 'Total Operating Cost Administration YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Operating Cost Administration],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: d19c100f-8c19-4b73-8423-100deb49a2b0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 191
+
+	measure 'Total Operating Cost Administration YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Operating Cost Administration],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 89c58ea6-95ed-462b-aada-57b313c650ae
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 192
+
+	measure TotalDepreciation&Amortization&InterestExp =
+			[Depreciation and Amortization]+[Amortization-Goodwill]-[Interest(Expense)]
+			/*[Deprec&AmortSmith]+[Deprec&Amort-EMRPushDown]+[Amortization-Goodwill_81580_81590]+[Interest(Expense)]*/
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: f65d9990-a637-4c45-825c-5a4ef7f2e88e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 203
+
+	measure 'TotalDepreciation&Amortization&InterestExp YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [TotalDepreciation&Amortization&InterestExp],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 3f52ab70-cf80-4424-add9-726e553afa40
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 204
+
+	measure 'TotalDepreciation&Amortization&InterestExp YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [TotalDepreciation&Amortization&InterestExp],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 2f6e3260-7839-4dc2-9031-4187b90a9f67
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 205
+
+	measure 'Total Other Income (Expense) YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Other Income (Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 90ca7911-2253-4ad0-8b81-89768a5c8b4a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 197
+
+	measure 'Total Other Income (Expense) YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Other Income (Expense)],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: e24814fb-3512-491e-9246-f359ba4fb5da
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 198
+
+	measure 'Total Expense YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Expense],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 0ece60f6-79ad-49ff-bdba-57427a79e59a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 182
+
+	measure 'Total Expense YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Expense],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: c87223d8-aa16-4607-9af3-83cdc3b70fa5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 183
+
+	measure 'Total Income-BeforeTax&Bonuses YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Income-BeforeTax&Bonuses],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 073be209-a9ef-496a-807a-c1f7e183fab5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 185
+
+	measure 'Total Income-BeforeTax&Bonuses YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Income-BeforeTax&Bonuses],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: e4a8d814-d734-49b3-b652-6289989f7274
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 186
+
+	measure 'Net Income' = [GrossProfit]-[Total Expense]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: a6da4dd2-b8fb-4a4d-a505-ce58f0784c4b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 108
+
+	measure 'Net Income YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Net Income],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: dcb81478-8992-4bd8-af35-973698304f17
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 110
+
+	measure 'Net Income YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Net Income],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 4535980e-69bd-4e21-9ba0-6e656a4681e0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 111
+
+	measure 'Total Int Tax Deprec Amort' = [TotalDepreciation&Amortization&InterestExp]+[IncomeTaxes]
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals
+		lineageTag: 2c8d359e-6736-4407-95bc-39e10260cd41
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 187
+
+	measure 'Total Int Tax Deprec Amort YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Total Int Tax Deprec Amort],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 2a6406e6-8d0e-4c43-8954-5c983a4fc9e9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 188
+
+	measure 'Total Int Tax Deprec Amort YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Total Int Tax Deprec Amort],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: e19856a2-751f-4f1c-8982-0c23b7bf97d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 189
+
+	measure 'EBITDA YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [EBITDA],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: fc9f4223-9206-4717-8f83-37d012bd523f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 41
+
+	measure 'EBITDA YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [EBITDA],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 4fe3a37d-522f-442e-bc1c-8a8fa9a0c1b1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 42
+
+	measure SalesRecovery = ```
+			
+			 
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 32000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 32499)
+			 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			    
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			(VALUE(L_Entries[AccountNoNumeric]) >= 32000 &&
+			        VALUE(L_Entries[AccountNoNumeric]) <= 32499)
+			 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			 -1*( IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 40949a55-6635-479d-970d-986311d8281a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 151
+
+	measure 'SalesRecovery YTD' =
+			
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [SalesRecovery],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 928a3b70-8664-4725-adf4-04d57aa38bf0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 152
+
+	measure 'SalesRecovery YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [SalesRecovery],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 24629209-3b12-46d3-af31-5e9bcc7d8170
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 153
+
+	measure 'Cost of SalesRecovery' = ```
+			
+			 
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			( VALUE(L_Entries[AccountNoNumeric]) >= 42000 &&
+			       VALUE( L_Entries[AccountNoNumeric]) <= 42100) || VALUE(L_Entries[AccountNoNumeric]) IN{42190,42175}
+			 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			    
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			( VALUE(L_Entries[AccountNoNumeric]) >= 42000 &&
+			       VALUE( L_Entries[AccountNoNumeric]) <= 42100) || VALUE(L_Entries[AccountNoNumeric]) IN{42190,42175}
+			 ,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			)
+			  RETURN
+			ABS( IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 50975dd1-74aa-4b27-8128-44f76b74d001
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 12
+
+	measure 'Cost of SalesRecovery YTD' =
+			
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Cost of SalesRecovery],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 73b9cf83-5b6b-4644-8ac0-d7a9ae92cc21
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 13
+
+	measure 'Cost of SalesRecovery YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Cost of SalesRecovery],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 543bcab5-e9ae-40fc-9af1-c8b16736e7c9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 14
+
+	measure Depreciation = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81465,81500},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81465,81500},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 04-Depreciation & Amortization
+		lineageTag: 76b8e79c-8b5f-40ce-a597-873b83b75417
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 34
+
+	measure AmortizationIntangibles = ```
+			
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81550,81575},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) in {81550,81575},
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 
+			
+			  RETURN
+			  IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_)
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 04-Depreciation & Amortization
+		lineageTag: bb66e61e-7812-4887-a50a-a1e58fccb980
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 3
+
+	measure 'Depreciation YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Depreciation],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 011af4e7-2653-486d-a6c5-3d4a44917803
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 35
+
+	measure 'Depreciation YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Depreciation],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 2e724af6-cf2d-401f-b9ea-6a06e5c2f167
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 36
+
+	measure 'AmortizationIntangibles YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [AmortizationIntangibles],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 806ffc25-6f29-48ff-b223-d2f50f830ea9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 4
+
+	measure 'AmortizationIntangibles YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [AmortizationIntangibles],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 4d866211-ea9e-45fe-992b-93695bebc207
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		annotation TabularEditor_Order = 5
+
+	measure EmployeeCount_Total = ```
+			
+			CALCULATE(
+			    [EmployeeCount],
+			    REMOVEFILTERS(DimBusinessUnit)
+			)
+			
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: 82650f8a-335e-40e9-8b16-952cc3cbdfa5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rental Income' = ```
+			
+			
+			 VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			        VALUE(L_Entries[AccountNoNumeric]) = 37000 ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			        VALUE(L_Entries[AccountNoNumeric]) = 37000,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 9e4a9d00-e345-421d-af2e-a8ec04de4e85
+
+	measure 'Rental Income-Unrelated Parties' = ```
+			
+			 VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			        VALUE(L_Entries[AccountNoNumeric]) = 30000 ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			        VALUE(L_Entries[AccountNoNumeric]) = 30000,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			-1*(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 05814966-59e2-49a8-afbd-d28b162470da
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Gross Rentals' = [Rental Income]+[Rental Income-Unrelated Parties]
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 00-Totals
+		lineageTag: 2d82c889-d033-4215-951f-d89fec6b7156
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Freight In-JS TRUCKING' = ```
+			
+			 VAR DEBIT_=
+			 CALCULATE(sum(L_Entries[Debit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			
+			VALUE(L_Entries[AccountNoNumeric]) =40991,
+			
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			
+			)
+			 VAR CREDIT_= 
+			  CALCULATE(sum(L_Entries[Credit_Amount]),ALLEXCEPT(L_Entries, L_Entries[G_L_Account_No],L_Entries[Posting_Date]),
+			VALUE(L_Entries[AccountNoNumeric]) =40991,
+			        KEEPFILTERS(VALUES(DimBusinessUnit[Business_Unit_Code])), TREATAS (
+			            VALUES ( DimCalendar[CalendarDate] ),
+			            L_Entries[Posting_Date]
+			        )
+			
+			) 
+			  RETURN
+			 ( IF(ISBLANK(DEBIT_),0,DEBIT_)-  IF(ISBLANK(CREDIT_),0,CREDIT_))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 01-General
+		lineageTag: 2b22d3af-cd22-4ef0-b0c6-870fd7158bc7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Bank Fees' = ```
+			
+			     VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			(VALUE(L_Entries[AccountNoNumeric]) =82630)
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			(VALUE(L_Entries[AccountNoNumeric]) =82630)
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 03-Operations Cost- Administration
+		lineageTag: a8d064e1-e81b-4831-b2fe-c849d7a373a8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Taxes-Real Estate & Property' = ```
+			
+			 
+			   VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			       (VALUE(L_Entries[AccountNoNumeric]) >=87461 && VALUE(L_Entries[AccountNoNumeric])<=87563) ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			      (VALUE(L_Entries[AccountNoNumeric]) >=87461 && VALUE(L_Entries[AccountNoNumeric])<=87563),L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 05-Other Income(Expense)
+		lineageTag: dc8b9e79-0fc2-4606-8c61-4f494cfea458
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Depreciation and Amortization' = ```
+			
+			       VAR DEBIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Debit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) =81500
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			VAR CREDIT_ =
+			    CALCULATE(
+			        SUM(L_Entries[Credit_Amount]),
+			VALUE(L_Entries[AccountNoNumeric]) =81500
+			       ,L_Entries[Source_Code] <> "CLSINCOME"
+			    )
+			RETURN
+			(COALESCE(DEBIT_,0) - COALESCE(CREDIT_,0))
+			```
+		formatString: $#,0;($#,0);"-"
+		displayFolder: 04-Depreciation & Amortization
+		lineageTag: b537138b-90cd-48a4-9064-6df6f9f594c0
+
+	measure 'Rental Income YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Rental Income],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 339cbef8-30d9-40be-bee4-093104acac5f
+
+	measure 'Rental Income YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Rental Income],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 8a779e2f-e899-4ee7-9d10-fccd390b071d
+
+	measure 'Rental Income-Unrelated Parties YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Rental Income-Unrelated Parties],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: c6024e0e-868a-4b2f-b699-11292a8c757b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rental Income-Unrelated Parties YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			RETURN
+			CALCULATE (
+			    [Rental Income-Unrelated Parties],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: b3074c50-4ce3-4a36-a066-fa1249a80f33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gross Rentals YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Gross Rentals],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: cea60857-d5c8-4e9a-aa51-dd642d1dceb1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gross Rentals YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Gross Rentals],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 46b1d56e-8e71-444f-a4cf-faea63d8747a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Freight In-JS TRUCKING YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Freight In-JS TRUCKING],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 709c0f4e-f32f-4caa-8e54-8f652f92d061
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Freight In-JS TRUCKING YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Freight In-JS TRUCKING],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 58c5b19a-56cd-498f-ad11-73551b961c24
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Bank Fees YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Bank Fees],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 45463170-e928-46da-9353-f7813d875102
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Bank Fees YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Bank Fees],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 39c8fc9a-e4e1-4094-aed7-35165555bc54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Taxes-Real Estate & Property YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Taxes-Real Estate & Property],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 470bcfde-6432-4dca-9f88-7ff12c05424e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Taxes-Real Estate & Property YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Taxes-Real Estate & Property],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: 9c2d6cbc-d779-40f4-b9c2-4efb092329dc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Depreciation and Amortization YTD' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate])
+			
+			RETURN
+			CALCULATE (
+			    [Depreciation and Amortization],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= MaxDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( MaxDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD
+		lineageTag: 27bfe353-741d-4cb6-be85-b1feae6d702e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Depreciation and Amortization YTD SPLY' =
+			
+			VAR MaxDate =
+			    MAX ( DimCalendar[CalendarDate] )
+			
+			VAR LastYearDate =
+			    EDATE ( MaxDate, -12 )
+			
+			RETURN
+			CALCULATE (
+			    [Depreciation and Amortization],
+			
+			    FILTER (
+			        ALL ( DimCalendar ),
+			        DimCalendar[CalendarDate] <= LastYearDate
+			            && YEAR ( DimCalendar[CalendarDate] ) = YEAR ( LastYearDate )
+			    )
+			)
+		formatString: $#,0;($#,0)
+		displayFolder: 00-Totals\YTD SPLY
+		lineageTag: c13a8682-4c92-4e30-9bc3-3814ec6c9fd4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure user_ = USERNAME()
+		lineageTag: 34feec74-fd67-42b3-9458-71a798221c9f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure user_principal = USERPRINCIPALNAME()
+		lineageTag: 7c45a14c-3826-4b3b-b118-7144e50650a4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Value
+		isHidden
+		formatString: 0
+		isAvailableInMdx: false
+		lineageTag: 3466165d-e3be-4897-965b-e1287fc10b4e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition Measures_IncomeStatements = calculated
+		mode: import
+		source = ROW("Value", 0)
+
+	annotation PBI_Id = 0e6115d878d44b86a20a88dcc1986d0b
+

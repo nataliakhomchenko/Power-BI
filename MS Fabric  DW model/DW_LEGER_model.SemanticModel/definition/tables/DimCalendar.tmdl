@@ -1,0 +1,129 @@
+table DimCalendar
+	lineageTag: 5508efe2-dc3a-4fa4-b6b4-3aa79889783a
+	sourceLineageTag: [dbo].[Calendar]
+	dataCategory: Time
+
+	measure Include_2_Year_Months_Filter = ```
+			VAR SelYear = [Selected_Year M]
+			
+			// Check if a single Month is selected from your disconnected Calendar table
+			VAR SelMonth = 
+			    IF(
+			        HASONEVALUE('Slicer Calendar Table'[Month]), 
+			        SELECTEDVALUE('Slicer Calendar Table'[Month]), 
+			        MAX('Slicer Calendar Table'[Month])
+			    )
+			
+			VAR CurrentDimYear = MAX(DimCalendar[Year])
+			VAR CurrentDimMonth = MAX(DimCalendar[MonthNo])
+			
+			VAR YearDiff = SelYear - CurrentDimYear
+			
+			RETURN
+			IF(
+			    ISBLANK(SelYear),
+			    1, -- Show all if no year is selected
+			    IF(
+			        YearDiff >= 0 && YearDiff <= 1
+			        && NOT(ISBLANK(SelMonth))
+			        && CurrentDimMonth <= SelMonth,
+			        1,
+			        0
+			    )
+			)
+			```
+		lineageTag: 925e1ff7-0b27-46e5-a0df-ca0d1f1a094a
+
+	column CalendarDate
+		dataType: dateTime
+		isKey
+		formatString: General Date
+		lineageTag: 29fd6ae2-8365-4991-8b4c-ce46183a4865
+		sourceLineageTag: CalendarDate
+		summarizeBy: none
+		sourceColumn: CalendarDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: 81dce2dc-9b46-4d00-96f3-77af3ceb7865
+		sourceLineageTag: Year
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Quarter
+		dataType: int64
+		lineageTag: 07ba91c6-7423-40e5-afcd-3489a3b0c7dc
+		sourceLineageTag: Quarter
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MonthNo
+		dataType: int64
+		lineageTag: d986bc8b-ad27-4c86-af4c-a48587d7e01f
+		sourceLineageTag: Month
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MonthName
+		dataType: string
+		lineageTag: 92b50ebd-aa62-45ec-a8f9-d49159253e1e
+		sourceLineageTag: MonthName
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekNumber
+		dataType: int64
+		lineageTag: 8f8d6664-a0be-43f7-ab10-53d607c7cbac
+		sourceLineageTag: WeekNumber
+		summarizeBy: none
+		sourceColumn: WeekNumber
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WeekdayName
+		dataType: string
+		lineageTag: a0a261a3-b396-410a-90bb-415e472f1810
+		sourceLineageTag: WeekdayName
+		summarizeBy: none
+		sourceColumn: WeekdayName
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWeekend
+		dataType: int64
+		lineageTag: c1703d07-379f-4a89-a7cf-b59f0ae7fa37
+		sourceLineageTag: IsWeekend
+		summarizeBy: none
+		sourceColumn: IsWeekend
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DimCalendar = entity
+		mode: directLake
+		source
+			entityName: Calendar
+			schemaName: dbo
+			expressionSource: 'DirectLake - DW_Ledger'
+
+	changedProperty = Name
+

@@ -1,0 +1,184 @@
+table 'Slicer Calendar Table'
+	lineageTag: 67543215-7b59-412a-b51f-cb2104aedccd
+	sourceLineageTag: [dbo].[Calendar_slicer]
+
+	measure 'Month_Prev m' =
+			
+			VAR _SlicerMonth = SELECTEDVALUE('Slicer Calendar Table'[Month])
+			RETURN
+			IF(
+			    NOT ISBLANK(_SlicerMonth),
+			    _SlicerMonth - 1,
+			    0
+			)
+		formatString: 0
+		lineageTag: d0c693fd-405e-4828-be15-dc643d608bad
+
+		changedProperty = Name
+
+	measure 'Selected Quarter M' =
+			VAR _Selected = SELECTEDVALUE('Slicer Calendar Table'[Quarter Number])
+			RETURN
+			IF(ISBLANK(_Selected), "All Quarters", FORMAT(_Selected, "0"))
+		lineageTag: cc829711-c88d-4829-8552-d2b2eedc3cd9
+
+		changedProperty = Name
+
+	measure 'Selected_Month M' =
+			
+			VAR _Selected = SELECTEDVALUE('Slicer Calendar Table'[Month])
+			RETURN
+			IF(ISBLANK(_Selected), "All Months", FORMAT(_Selected, "0"))
+		lineageTag: d00d487c-953f-4d3a-924e-c4a0891a6bc3
+
+		changedProperty = Name
+
+	measure 'Selected_Year M' =
+			
+			VAR _Selected = SELECTEDVALUE('Slicer Calendar Table'[Year])
+			RETURN
+			IF(ISBLANK(_Selected), "All Years", FORMAT(_Selected, "0"))
+		lineageTag: 139ef3c8-4830-473e-ac19-bd2b7cabb28b
+
+		changedProperty = Name
+
+	measure Year_Prev =
+			
+			VAR _MaxYear = MAX('Slicer Calendar Table'[Year]) // Or YEAR(TODAY())
+			VAR _ColumnYear =SELECTEDVALUE( 'Slicer Calendar Table'[Year])
+			RETURN
+			IF(
+			    (_MaxYear - _ColumnYear) <= 1 && (_MaxYear - _ColumnYear) >= 0,
+			    _ColumnYear,
+			    0
+			)
+		formatString: 0
+		lineageTag: 0de82518-fc37-481f-9cf5-84de8869695c
+
+		changedProperty = Name
+
+	column CalendarDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: caa92557-9fe2-4a77-ba56-024740c2fa1f
+		sourceLineageTag: CalendarDate
+		summarizeBy: none
+		sourceColumn: CalendarDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: f7258d75-57de-473a-b463-b03c95691214
+		sourceLineageTag: Year
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Quarter Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b7828ab-099e-4ce3-9049-43a9bc182409
+		sourceLineageTag: Quarter
+		summarizeBy: sum
+		sourceColumn: Quarter
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 3501464e-518a-465e-90f6-7a86a32f2b5d
+		sourceLineageTag: Month
+		summarizeBy: sum
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 37057ed8-2764-4e10-8e42-ea0a059c406d
+		sourceLineageTag: MonthName
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 6781002e-30d1-4412-9c52-37cc26c3f786
+		sourceLineageTag: WeekNumber
+		summarizeBy: sum
+		sourceColumn: WeekNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekdayName
+		dataType: string
+		lineageTag: 5d989a26-5055-45d6-967b-e169617ffdbe
+		sourceLineageTag: WeekdayName
+		summarizeBy: none
+		sourceColumn: WeekdayName
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWeekend
+		dataType: int64
+		formatString: 0
+		lineageTag: b7701175-65aa-4c7e-9851-e22a0f7b6a07
+		sourceLineageTag: IsWeekend
+		summarizeBy: sum
+		sourceColumn: IsWeekend
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Combined' =
+			
+			SWITCH(
+			    TRUE(),
+			    'Slicer Calendar Table'[Month Name] = "January",   "01 - Jan",
+			    'Slicer Calendar Table'[Month Name] = "February",  "02 - Feb",
+			    'Slicer Calendar Table'[Month Name] = "March",     "03 - Mar",
+			    'Slicer Calendar Table'[Month Name] = "April",     "04 - Apr",
+			    'Slicer Calendar Table'[Month Name] = "May",       "05 - May",
+			    'Slicer Calendar Table'[Month Name] = "June",      "06 - Jun",
+			    'Slicer Calendar Table'[Month Name] = "July",      "07 - Jul",
+			    'Slicer Calendar Table'[Month Name] = "August",    "08 - Aug",
+			    'Slicer Calendar Table'[Month Name] = "September", "09 - Sep",
+			    'Slicer Calendar Table'[Month Name] = "October",   "10 - Oct",
+			    'Slicer Calendar Table'[Month Name] = "November",  "11 - Nov",
+			    'Slicer Calendar Table'[Month Name] = "December",  "12 - Dec"
+			)
+		lineageTag: 3c5f9c05-d81f-4c91-bbf8-7eb18999d463
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter = "Q"& FORMAT ( 'Slicer Calendar Table'[CalendarDate], "Q" )
+		lineageTag: 432e26f9-75c6-4b6f-af9b-dab55979738c
+		summarizeBy: none
+		expressionContext: userContext
+
+		changedProperty = Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Slicer Calendar Table' = entity
+		mode: directLake
+		source
+			entityName: Calendar_slicer
+			schemaName: dbo
+			expressionSource: 'DirectLake - DW_Ledger'
+
+	changedProperty = Name
+

@@ -1,0 +1,15 @@
+relationship 93020d2d-1e76-2340-ae8a-e8e3087ccc3c
+	fromColumn: L_Entries.Business_Unit_Code
+	toColumn: DimBusinessUnit.Business_Unit_Code
+
+relationship dcb0ea46-6cc2-a0df-b65c-ce14ecf29b33
+	relyOnReferentialIntegrity
+	fromColumn: L_Entries.Document_Date
+	toColumn: DimCalendar.CalendarDate
+
+relationship 49ab0ccd-7066-2544-cc03-6c36c648cb61
+	isActive: false
+	relyOnReferentialIntegrity
+	fromColumn: L_Entries.Posting_Date
+	toColumn: DimCalendar.CalendarDate
+
